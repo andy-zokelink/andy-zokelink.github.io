@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清华AI高研班 · 周总结 2026-08-09~14</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #FAFAF8; color: #1a1a1a; line-height: 1.7; }
+  .container { max-width: 920px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 40px; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+  .header .subtitle { font-size: 15px; color: #999; }
+  .header .badge { display: inline-block; background: #F59E0B; color: #fff; font-size: 12px; padding: 3px 12px; border-radius: 20px; margin-top: 12px; }
+
+  /* Stats Bar */
+  .stats { display: flex; gap: 12px; margin-bottom: 36px; flex-wrap: wrap; }
+  .stat-card { flex: 1; min-width: 130px; background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .stat-card .num { font-size: 26px; font-weight: 700; color: #F59E0B; }
+  .stat-card .label { font-size: 12px; color: #888; margin-top: 4px; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 28px; margin-bottom: 36px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: #F0E6D6; }
+  .day { position: relative; margin-bottom: 24px; }
+  .day::before { content: ''; position: absolute; left: -24px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; border: 2px solid #fff; box-shadow: 0 0 0 2px #F0E6D6; }
+  .day-date { font-size: 13px; font-weight: 600; color: #F59E0B; margin-bottom: 4px; }
+  .day-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .day-content { font-size: 14px; color: #555; }
+  .day-content ul { list-style: none; padding: 0; }
+  .day-content li { padding: 2px 0; padding-left: 16px; position: relative; }
+  .day-content li::before { content: '·'; position: absolute; left: 4px; color: #F59E0B; font-weight: 700; }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 4px; margin-right: 4px; margin-bottom: 2px; }
+  .tag-course { background: #FEF3C7; color: #92400E; }
+  .tag-doc { background: #DBEAFE; color: #1E40AF; }
+  .tag-recording { background: #D1FAE5; color: #065F46; }
+  .tag-project { background: #FCE7F3; color: #9D174D; }
+
+  /* Insight Cards */
+  .section-title { font-size: 18px; font-weight: 700; margin: 36px 0 16px; padding-left: 12px; border-left: 4px solid #F59E0B; }
+  .insights { display: grid; gap: 12px; }
+  .insight-card { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .insight-card .num { font-size: 13px; font-weight: 700; color: #F59E0B; }
+  .insight-card .title { font-size: 15px; font-weight: 600; margin: 4px 0 6px; }
+  .insight-card .desc { font-size: 13px; color: #666; }
+
+  /* Resonance */
+  .resonance { background: linear-gradient(135deg, #FFFbeb 0%, #FEF3C7 100%); border-radius: 12px; padding: 20px; margin: 24px 0; }
+  .resonance h3 { font-size: 15px; font-weight: 700; color: #92400E; margin-bottom: 12px; }
+  .resonance-item { font-size: 14px; color: #78350F; padding: 4px 0; padding-left: 20px; position: relative; }
+  .resonance-item::before { content: '◆'; position: absolute; left: 0; color: #F59E0B; font-size: 10px; top: 6px; }
+
+  /* Actions */
+  .actions { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-top: 24px; }
+  .actions h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+  .action-item { font-size: 14px; padding: 6px 0; border-bottom: 1px solid #f5f5f5; }
+  .action-item:last-child { border: none; }
+  .action-priority { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 4px; margin-right: 8px; }
+  .pri-high { background: #FEE2E2; color: #991B1B; }
+  .pri-mid { background: #FEF3C7; color: #92400E; }
+  .pri-low { background: #DBEAFE; color: #1E40AF; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>清华AI高研班 · 周总结</h1>
+    <div class="subtitle">2026年8月9日—14日 · 紫荆组 · 第1期</div>
+    <div class="badge">6天 · 7门课/课件 · 4段录音</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><div class="num">6</div><div class="label">学习天数</div></div>
+    <div class="stat-card"><div class="num">7</div><div class="label">课件/文档</div></div>
+    <div class="stat-card"><div class="num">4h+</div><div class="label">录音课程</div></div>
+    <div class="stat-card"><div class="num">5</div><div class="label">学习日志</div></div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section-title">每日学习时间轴</div>
+  <div class="timeline">
+
+    <div class="day">
+      <div class="day-date">8月9日 · Day 1</div>
+      <div class="day-title">开班破冰 · 赵可金教授</div>
+      <div class="day-content">
+        <ul>
+          <li><span class="tag tag-course">课程</span> 国际秩序转型与中美战略竞争</li>
+          <li>百年大变局=时间大加速+空间大分化</li>
+          <li>"张顺下水、李逵上岸"——企业在两条供应链（经济效益型 vs 国家安全型）中对号入座</li>
+          <li>中方谈判三张牌"土豆尼"：稀土、市场、美债</li>
+          <li>Andy任三组组长（紫荆组），郭世文当选学习委员</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-date">8月10日 · Day 2</div>
+      <div class="day-title">共学问答 · 清华校史 · 同学日志评选</div>
+      <div class="day-content">
+        <ul>
+          <li><span class="tag tag-course">课程</span> 清华历史与文化</li>
+          <li><span class="tag tag-recording">录音</span> 赵可金课程共学问答（3题复习）</li>
+          <li>16篇同学学习日志评选，郭世文两课最佳</li>
+          <li>校风"行胜于言"与广东务实基因共振</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-date">8月11日 · Day 3</div>
+      <div class="day-title">产品硬件设计 · 校友社区项目启动</div>
+      <div class="day-content">
+        <ul>
+          <li><span class="tag tag-doc">文档</span> 产品硬件设计PDF（待整理学习日志）</li>
+          <li><span class="tag tag-project">项目</span> 与王惠老师发起清华校友社区（小红书式）</li>
+          <li>Next.js+Prisma+SQLite 搭建Demo，GitHub私有仓库托管</li>
+          <li>同学信息：薛雅容，第一组小组长，广州，01科技</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-date">8月12日 · Day 4</div>
+      <div class="day-title">AI+智能制造 · 十五五规划 · 张同林教授</div>
+      <div class="day-content">
+        <ul>
+          <li><span class="tag tag-recording">录音</span> 张同林教授：人工智能+智能制造（4小时，两段录音）</li>
+          <li><span class="tag tag-doc">文档</span> AI行业融合应用解决方案PDF</li>
+          <li><span class="tag tag-doc">文档</span> 十五五规划解读与中小企业高质量发展（103页PPT）</li>
+          <li>核心概念：数模共振、工业AI原生四条规律、"卖铲人"策略</li>
+          <li>课前行业情报：存储芯片2026缺货行情，海力士收购美光香港产能</li>
+          <li>豌豆思维（VIPThink）调研：广州独角兽，创新工场+软银投资</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-date">8月13日 · Day 5</div>
+      <div class="day-title">学习日志整理 · 课前情报复盘</div>
+      <div class="day-content">
+        <ul>
+          <li>张同林课程学习日志完整整理（4小时录音→结构化日志）</li>
+          <li>核心判断：数据是生产要素（政策坐实）+ 工业软件不会被大模型淘汰</li>
+          <li>美的14个工业智能体模式对标三底盘模型</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-date">8月14日 · Day 6</div>
+      <div class="day-title">AI伦理与国家竞争 · 系统思维 · 结业</div>
+      <div class="day-content">
+        <ul>
+          <li><span class="tag tag-doc">文档</span> 人工智能伦理、行业与国家竞争（54页PDF）</li>
+          <li><span class="tag tag-doc">文档</span> 产业视角下的系统思维（汤彬教授，160页PDF）</li>
+          <li>AI三次进化：大模型→推理模型→智能体</li>
+          <li>AI军事应用已实战（"史诗之怒"行动：Claude+Maven系统）</li>
+          <li>五观框架：整体优化/结构功能/层次转化/差异协同/自组涌现</li>
+          <li>HTML可视化图表已生成发群</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Core Insights -->
+  <div class="section-title">本周五大核心收获</div>
+  <div class="insights">
+
+    <div class="insight-card">
+      <div class="num">01</div>
+      <div class="title">数据是矿藏——政策层面已坐实</div>
+      <div class="desc">张同林教授引国务院2020年文件：数据列为继土地/资本/劳动力之后的第四生产要素。"数模共振"计划要建几万个行业数据集。与Andy"数据是矿藏、工具是解码器"判断完全吻合。中科领创客户产线工艺数据本身就是高价值工业数据集原料。</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="num">02</div>
+      <div class="title">AI三次进化路线清晰，智能体阶段已到来</div>
+      <div class="desc">传统大模型（ChatGPT 2022，概率预测）→ 推理模型（o1 2024，思维链）→ AI智能体（2024底，能规划能行动）。AI已从理论进入实战——美以"史诗之怒"行动中Claude+Maven实现全链路AI辅助。中科领创的芯片代理主业不是过渡，是AI基础设施。</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="num">03</div>
+      <div class="title">"卖铲人"定位被验证——中科领创的位置对了</div>
+      <div class="desc">十五五课件明确：中小企业不争当"淘金者"，做产业链上游配套者。12条产品线（普冉/思特威/爱科微/广和通/思必驰等）天然就是AI+制造的"卖铲人"。班里70%同学做AI/IT，做半导体/电子的只有3人（5.88%）——稀缺就是杠杆。</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="num">04</div>
+      <div class="title">五观系统思维框架——可直接迁移的战略分析工具</div>
+      <div class="desc">汤彬教授的五观框架（整体优化/结构功能/层次转化/差异协同/自组涌现）可套到任何产业做诊断。钢铁"大而不强"困境与中科领创芯片渠道处境结构相似：规模大但议价弱、上游集中度高、分散竞争抬高了成本。中国矿产资源集团整合进口权=芯片渠道集采可参考。</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="num">05</div>
+      <div class="title">全球AI格局美中双雄，中国出海机遇与阻力并存</div>
+      <div class="desc">美国40个重要模型/中国15个/欧盟3个。DeepSeek使中国大模型全球份额2%→6%。但多国禁限（澳加意德）。中国应对：自主基础设施+东数西算+数字丝绸之路。积极合作国家清单=出海方向参考。芯片供应链出口管制变化直接影响业务。</div>
+    </div>
+
+  </div>
+
+  <!-- Resonance with Andy's Framework -->
+  <div class="resonance">
+    <h3>◆ 与Andy ABCD模型的共振</h3>
+    <div class="resonance-item">"从化学到化工=从0到1→从1到2"的层次转化，与"D数据→A算力解码"逻辑一致</div>
+    <div class="resonance-item">"工业软件基于知识沉淀，大模型不会淘汰它"——印证"工具不值钱，数据值钱"</div>
+    <div class="resonance-item">自组涌现观："新兴科技产业不是被规划出来的，而是在技术市场人才互动中生长出来的"——与"积累数据矿藏、等待涌现"互补</div>
+    <div class="resonance-item">中小企业"先数字化再智能化"——与"在体量很小时就按未来规模搭底盘，冗余没关系"一致</div>
+    <div class="resonance-item">工业AI原生四条规律（门槛极高/复制极低/赢者通吃/数据+机理双融合）——谁先卡住一个工业场景的芯片+数据配套，谁就锁住那个场景</div>
+  </div>
+
+  <!-- Action Items -->
+  <div class="actions">
+    <h3>📋 待办行动项（汇总）</h3>
+    <div class="action-item"><span class="action-priority pri-high">高</span>产品硬件设计PDF学习日志未完成，需补齐</div>
+    <div class="action-item"><span class="action-priority pri-high">高</span>跟Jack确认康盈存储产能是否覆盖下半年订单峰值（存储缺货行情）</div>
+    <div class="action-item"><span class="action-priority pri-mid">中</span>整理「数模共振20个重点工业领域+各省数据集任务清单」</div>
+    <div class="action-item"><span class="action-priority pri-mid">中</span>研究「卖芯片」升级到「卖芯片+数据服务」的可行性</div>
+    <div class="action-item"><span class="action-priority pri-mid">中</span>列出109项重大工程中与芯片相关的项目清单</div>
+    <div class="action-item"><span class="action-priority pri-low">低</span>校友社区项目：解决服务器稳定性（阿里云香港轻量288元/年）</div>
+    <div class="action-item"><span class="action-priority pri-low">低</span>约端侧AI芯片同学（2023年新公司，年底流片）深聊</div>
+  </div>
+
+  <div class="footer">
+    阿森（Axiom）· 2026-08-14<br>
+    清华AI高研班 第1期 · 紫荆组
+  </div>
+
+</div>
+</body>
+</html>

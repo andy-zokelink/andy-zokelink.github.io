@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产业视角下的系统思维 — 清华大学讲座 · 汤彬</title>
+<style>
+/* ============ 基础重置 ============ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Source Han Sans SC","Noto Sans CJK SC",sans-serif;
+  background:#ffffff;color:#1f2937;line-height:1.6;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+:root{
+  --amber:#F59E0B; --amber-d:#B45309; --amber-l:#FEF3C7; --amber-xl:#FFFBEB;
+  --ink:#1f2937; --ink-2:#374151; --ink-3:#6b7280; --line:#e5e7eb;
+  --bg-soft:#f9fafb; --bg-card:#ffffff;
+}
+
+/* ============ 容器 ============ */
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* ============ 封面 ============ */
+.cover{
+  background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 45%,#FDE68A 100%);
+  border-bottom:4px solid var(--amber);
+  padding:64px 28px 56px;text-align:center;position:relative;overflow:hidden;
+}
+.cover::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,rgba(245,158,11,.12),transparent 50%);
+  pointer-events:none;
+}
+.cover h1{font-size:42px;color:var(--ink);letter-spacing:2px;font-weight:800;position:relative}
+.cover .sub{margin-top:14px;font-size:18px;color:var(--amber-d);font-weight:600;position:relative}
+.cover .meta{margin-top:22px;font-size:14px;color:var(--ink-3);position:relative}
+.cover .meta span{display:inline-block;margin:0 14px}
+.cover .meta b{color:var(--amber-d)}
+.cover .toc{
+  margin:34px auto 0;max-width:760px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;position:relative;
+}
+.cover .toc a{
+  display:inline-block;padding:7px 14px;background:rgba(255,255,255,.7);border:1px solid rgba(245,158,11,.35);
+  border-radius:20px;font-size:13px;color:var(--amber-d);text-decoration:none;transition:.2s;
+}
+.cover .toc a:hover{background:var(--amber);color:#fff;border-color:var(--amber)}
+
+/* ============ 段落 ============ */
+.section{padding:54px 0;border-bottom:1px solid var(--line)}
+.section:last-child{border-bottom:none}
+.section-head{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+.section-num{
+  flex:0 0 auto;width:42px;height:42px;border-radius:50%;
+  background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:18px;box-shadow:0 3px 10px rgba(245,158,11,.3)
+}
+.section-title{font-size:26px;font-weight:800;color:var(--ink)}
+.section-title small{display:block;font-size:13px;color:var(--ink-3);font-weight:400;margin-top:2px}
+.section-lead{
+  margin:0 0 28px;padding:14px 18px;background:var(--amber-xl);border-left:4px solid var(--amber);
+  border-radius:0 8px 8px 0;font-size:14px;color:var(--ink-2);
+}
+
+/* ============ 卡片 ============ */
+.card{
+  background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:22px;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);transition:.2s;
+}
+.card:hover{box-shadow:0 6px 20px rgba(245,158,11,.12);transform:translateY(-2px)}
+.card-h{font-size:16px;font-weight:700;color:var(--amber-d);margin-bottom:14px}
+.stat-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:18px}
+.stat{flex:1;min-width:120px;text-align:center;padding:14px 8px;background:var(--bg-soft);border-radius:8px}
+.stat .v{font-size:24px;font-weight:800;color:var(--amber-d)}
+.stat .l{font-size:12px;color:var(--ink-3);margin-top:2px}
+
+/* ============ 五观卡片 ============ */
+.five-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.five-card{
+  background:var(--bg-card);border:1px solid var(--line);border-top:4px solid var(--amber);
+  border-radius:12px;padding:22px;position:relative;transition:.2s;
+}
+.five-card:hover{box-shadow:0 8px 24px rgba(245,158,11,.15)}
+.five-card .ico{font-size:30px;margin-bottom:6px}
+.five-card .pname{font-size:20px;font-weight:800;color:var(--amber-d)}
+.five-card .pind{margin-top:4px;font-size:15px;font-weight:700;color:var(--ink)}
+.five-card .chain{margin:16px 0 12px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.five-card .chain .step{
+  background:var(--amber-xl);border:1px solid rgba(245,158,11,.3);color:var(--amber-d);
+  padding:5px 10px;border-radius:6px;font-size:12.5px;font-weight:600;
+}
+.five-card .chain .arr{color:var(--amber);font-weight:800}
+.five-card .tag-outer{
+  display:inline-block;margin-top:6px;font-size:12px;padding:3px 10px;
+  background:var(--ink);color:#fff;border-radius:10px;
+}
+
+/* ============ 时间轴 ============ */
+.timeline{position:relative;padding:30px 0 10px;overflow-x:auto;padding-bottom:24px}
+.timeline .rail{
+  position:absolute;top:42px;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--amber),#FDE68A);
+  border-radius:2px;min-width:900px;
+}
+.timeline .nodes{display:flex;justify-content:space-between;min-width:900px;padding:0 6px}
+.tl-node{flex:1;max-width:120px;text-align:center;position:relative}
+.tl-node .dot{
+  width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--amber);
+  margin:34px auto 10px;position:relative;z-index:2;
+}
+.tl-node .yr{font-size:13px;font-weight:800;color:var(--amber-d)}
+.tl-node .ev{font-size:11.5px;color:var(--ink-2);margin-top:4px;line-height:1.45}
+
+/* ============ 学派卡片 ============ */
+.school-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.school-card{border-radius:12px;padding:22px;color:#fff;position:relative;overflow:hidden}
+.school-eu{background:linear-gradient(135deg,#0EA5E9,#0369a1)}
+.school-us{background:linear-gradient(135deg,#dc2626,#991b1b)}
+.school-cn{background:linear-gradient(135deg,#F59E0B,#B45309)}
+.school-card h4{font-size:20px;font-weight:800;margin-bottom:6px}
+.school-card .flag{font-size:26px}
+.school-card .sub{font-size:13px;opacity:.85;margin-bottom:14px}
+.school-card ul{list-style:none}
+.school-card li{
+  font-size:13px;padding:7px 0;border-top:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:flex-start;gap:8px;
+}
+.school-card li::before{content:"◆";opacity:.7;flex:0 0 auto}
+.school-card .rep{margin-top:12px;font-size:12px;opacity:.9;font-style:italic}
+
+/* ============ 条形图 ============ */
+.bar-block{margin:18px 0}
+.bar-block .bt{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;font-weight:600;color:var(--ink-2)}
+.bar-track{height:26px;background:var(--bg-soft);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:12px;font-weight:700;transition:width 1s}
+.bar-fill.alt{background:linear-gradient(90deg,#0EA5E9,#7dd3fc)}
+.bar-fill.danger{background:linear-gradient(90deg,#dc2626,#fb923c)}
+.bar-fill.green{background:linear-gradient(90deg,#16a34a,#86efac)}
+
+/* ============ 对比 ============ */
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.vs-cell{padding:18px;background:var(--bg-card)}
+.vs-cell:first-child{border-right:1px solid var(--line)}
+.vs-cell h5{font-size:16px;font-weight:800;margin-bottom:10px}
+.vs-cell.left h5{color:#0EA5E9}
+.vs-cell.right h5{color:var(--amber-d)}
+.vs-cell p{font-size:13.5px;color:var(--ink-2);margin-bottom:8px}
+.vs-cell .badge{display:inline-block;font-size:12px;padding:2px 10px;border-radius:10px;font-weight:600}
+.vs-cell.left .badge{background:#e0f2fe;color:#0369a1}
+.vs-cell.right .badge{background:var(--amber-l);color:var(--amber-d)}
+
+/* ============ 流程链 ============ */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:18px 0}
+.flow .node{
+  background:var(--bg-card);border:2px solid var(--amber);color:var(--amber-d);
+  padding:9px 16px;border-radius:8px;font-size:13px;font-weight:700;text-align:center;min-width:80px;
+}
+.flow .node.alt{border-color:#0EA5E9;color:#0369a1}
+.flow .arr{font-size:20px;color:var(--amber);font-weight:800}
+.flow .arr.r{color:#dc2626}
+
+/* ============ 进化路径 ============ */
+.evo{display:flex;align-items:stretch;gap:0;margin:18px 0;flex-wrap:wrap}
+.evo-step{
+  flex:1;min-width:140px;padding:14px 12px;background:var(--bg-card);border:1px solid var(--line);
+  position:relative;text-align:center;
+}
+.evo-step:not(:last-child){border-right:none}
+.evo-step:not(:last-child)::after{
+  content:"▶";position:absolute;right:-9px;top:50%;transform:translateY(-50%);
+  color:var(--amber);font-size:13px;z-index:2;background:#fff;width:18px;text-align:center;
+}
+.evo-step .flag{font-size:24px}
+.evo-step .country{font-size:12px;color:var(--ink-3);margin-top:4px}
+.evo-step .desc{font-size:13px;font-weight:700;color:var(--ink);margin-top:4px}
+.evo-step .yr{font-size:11px;color:var(--amber-d);font-weight:700;margin-top:2px}
+
+/* ============ 数据高亮 ============ */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
+.kpi{
+  background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:16px;text-align:center;
+  border-bottom:3px solid var(--amber);
+}
+.kpi .num{font-size:28px;font-weight:800;color:var(--amber-d)}
+.kpi .num.blue{color:#0EA5E9}
+.kpi .num.red{color:#dc2626}
+.kpi .lbl{font-size:12px;color:var(--ink-3);margin-top:4px}
+
+/* ============ 任务列表 ============ */
+.task-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+.task-col{background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.task-col h5{font-size:15px;font-weight:800;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--amber);color:var(--amber-d)}
+.task-col .count{font-size:32px;font-weight:800;color:var(--amber-d)}
+.task-col ul{list-style:none;margin-top:10px}
+.task-col li{font-size:12.5px;padding:6px 0;color:var(--ink-2);border-bottom:1px dashed var(--line)}
+.task-col li:last-child{border-bottom:none}
+
+/* ============ 引语 ============ */
+.quote{
+  margin:24px 0;padding:22px 26px;background:linear-gradient(135deg,var(--amber-xl),#fff);
+  border-left:5px solid var(--amber);border-radius:0 12px 12px 0;font-size:16px;color:var(--ink);
+  font-style:italic;line-height:1.8;
+}
+.quote .by{display:block;margin-top:10px;font-size:13px;color:var(--ink-3);font-style:normal;text-align:right}
+
+/* ============ 安全案例 ============ */
+.safety-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.safety-card{
+  background:#fff;border:1px solid #fecaca;border-left:4px solid #dc2626;border-radius:8px;padding:14px;
+}
+.safety-card .place{font-size:15px;font-weight:700;color:#991b1b}
+.safety-card .dead{font-size:26px;font-weight:800;color:#dc2626;margin:4px 0}
+.safety-card .dl{font-size:12px;color:var(--ink-3)}
+
+/* ============ 收束图 ============ */
+.converge{position:relative;height:380px;margin:20px 0}
+.converge .center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,var(--amber),var(--amber-d));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;text-align:center;
+  box-shadow:0 0 40px rgba(245,158,11,.4);z-index:5;
+}
+.converge .ray{
+  position:absolute;width:3px;height:140px;background:linear-gradient(180deg,transparent,var(--amber));
+  top:50px;left:50%;transform-origin:bottom center;
+}
+.converge .node5{
+  position:absolute;width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  text-align:center;font-size:12px;font-weight:700;color:#fff;
+}
+.n1{background:#0EA5E9;top:10px;left:50%;transform:translateX(-50%)}
+.n2{background:#16a34a;top:80px;right:5%}
+.n3{background:#dc2626;bottom:30px;right:12%}
+.n4{background:#7c3aed;bottom:30px;left:12%}
+.n5{background:#F59E0B;top:80px;left:5%}
+
+/* ============ 标签云 ============ */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.tags .tg{
+  font-size:12.5px;padding:6px 14px;border-radius:16px;font-weight:600;
+  background:var(--amber-xl);color:var(--amber-d);border:1px solid rgba(245,158,11,.3);
+}
+.tags .tg.blue{background:#e0f2fe;color:#0369a1;border-color:rgba(14,165,233,.3)}
+.tags .tg.green{background:#dcfce7;color:#16a34a;border-color:rgba(22,163,74,.3)}
+.tags .tg.red{background:#fee2e2;color:#dc2626;border-color:rgba(220,38,38,.3)}
+
+/* ============ 双列 ============ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.two-col,.task-cols,.vs-grid,.safety-grid{grid-template-columns:1fr}}
+
+/* ============ 页脚 ============ */
+.footer{background:var(--ink);color:#9ca3af;text-align:center;padding:30px 20px;font-size:13px}
+.footer b{color:var(--amber)}
+
+/* ============ 打印 ============ */
+@media print{
+  .cover{page-break-after:always}
+  .section{page-break-inside:avoid}
+  .toc,.cover .toc{display:none}
+  body{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 封面 ============ -->
+<header class="cover">
+  <h1>产业视角下的系统思维</h1>
+  <div class="sub">Systems Thinking from Industry Perspective</div>
+  <div class="meta">
+    <span>📍 <b>清华大学</b> 讲座</span>
+    <span>👨‍🏫 主讲：<b>汤 彬</b></span>
+  </div>
+  <nav class="toc">
+    <a href="#s1">① 五观映射表</a>
+    <a href="#s2">② 发展历程</a>
+    <a href="#s3">③ 三大学派</a>
+    <a href="#s4">④ 能源产业</a>
+    <a href="#s5">⑤ 钢铁产业</a>
+    <a href="#s6">⑥ 化工产业</a>
+    <a href="#s7">⑦ 汽车产业</a>
+    <a href="#s8">⑧ 人工智能</a>
+    <a href="#s9">⑨ 收束</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ============ 1. 五观映射表 ============ -->
+<section class="section" id="s1">
+  <div class="section-head">
+    <div class="section-num">1</div>
+    <div class="section-title">核心框架：五观映射表
+      <small>系统思维五大视角 × 五大产业案例</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    系统思维由<b>五观</b>构成：整体优化观、结构功能观、层次转化观、差异协同观、自组涌现观。
+    每一观对应<b>内在逻辑</b>（演化路径）、<b>外在逻辑</b>（方法论定位）与一个<b>产业案例</b>，形成完整的"思维—产业"映射体系。
+  </div>
+
+  <div class="five-grid">
+
+    <div class="five-card">
+      <div class="ico">⚡</div>
+      <div class="pname">整体优化观</div>
+      <div class="pind">能源产业</div>
+      <div class="chain">
+        <span class="step">相对优化</span><span class="arr">→</span>
+        <span class="step">整体优化</span><span class="arr">→</span>
+        <span class="step">长远进步</span>
+      </div>
+      <span class="tag-outer">外在逻辑：宏观原则</span>
+    </div>
+
+    <div class="five-card">
+      <div class="ico">🏗️</div>
+      <div class="pname">结构功能观</div>
+      <div class="pind">钢铁产业</div>
+      <div class="chain">
+        <span class="step">元素</span><span class="arr">→</span>
+        <span class="step">结构（功能）</span><span class="arr">→</span>
+        <span class="step">整体</span>
+      </div>
+      <span class="tag-outer">外在逻辑：微观解析</span>
+    </div>
+
+    <div class="five-card">
+      <div class="ico">⚗️</div>
+      <div class="pname">层次转化观</div>
+      <div class="pind">化工产业</div>
+      <div class="chain">
+        <span class="step">低层次</span><span class="arr">→</span>
+        <span class="step">中介（曲折进步）</span><span class="arr">→</span>
+        <span class="step">高层次</span>
+      </div>
+      <span class="tag-outer">外在逻辑：动态视角</span>
+    </div>
+
+    <div class="five-card">
+      <div class="ico">🚗</div>
+      <div class="pname">差异协同观</div>
+      <div class="pind">汽车产业</div>
+      <div class="chain">
+        <span class="step">差异</span><span class="arr">→</span>
+        <span class="step">协同</span><span class="arr">→</span>
+        <span class="step">进化</span>
+      </div>
+      <span class="tag-outer">外在逻辑：根本动力</span>
+    </div>
+
+    <div class="five-card">
+      <div class="ico">🤖</div>
+      <div class="pname">自组涌现观</div>
+      <div class="pind">人工智能产业</div>
+      <div class="chain">
+        <span class="step">优化式积累</span><span class="arr">→</span>
+        <span class="step">层次式进化</span><span class="arr">→</span>
+        <span class="step">爆发式涌现</span>
+      </div>
+      <span class="tag-outer">外在逻辑：演化结果</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. 发展历程 ============ -->
+<section class="section" id="s2">
+  <div class="section-head">
+    <div class="section-num">2</div>
+    <div class="section-title">系统思维发展历程
+      <small>从古代整体论到现代复杂系统科学</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    系统思维经历"<b>整体论 → 还原论 → 系统论 → 复杂性科学</b>"四阶段演进。
+    古代朴素整体观被16世纪兴起的还原论取代，20世纪后系统科学复兴，并分化为欧洲、美国、中国三大学派。
+  </div>
+
+  <div class="timeline">
+    <div class="rail"></div>
+    <div class="nodes">
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">古代</div>
+        <div class="ev">亚里斯多德"整体大于部分之和"；周易、中医整体观</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">16世纪</div>
+        <div class="ev">还原论兴起<br>伽利略·培根·笛卡尔·牛顿</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">1932</div>
+        <div class="ev">贝塔朗菲<br>提出系统论</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">1937</div>
+        <div class="ev">贝塔朗菲<br>一般系统论原理</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">1948</div>
+        <div class="ev">维纳控制论<br>香农信息论</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">1969</div>
+        <div class="ev">普利高津耗散结构<br>哈肯协同论</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">1972</div>
+        <div class="ev">托姆<br>突变论</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">1979</div>
+        <div class="ev">艾根<br>超循环理论</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">1994</div>
+        <div class="ev">霍兰<br>复杂适应系统(CAS)</div>
+      </div>
+      <div class="tl-node">
+        <div class="dot"></div><div class="yr">80年代末</div>
+        <div class="ev">钱学森<br>开放的复杂巨系统</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow" style="justify-content:center;margin-top:30px">
+    <span class="node">朴素整体论</span><span class="arr">→</span>
+    <span class="node alt">还原论</span><span class="arr">→</span>
+    <span class="node">一般系统论</span><span class="arr">→</span>
+    <span class="node alt">复杂性科学</span>
+  </div>
+</section>
+
+<!-- ============ 3. 三大学派 ============ -->
+<section class="section" id="s3">
+  <div class="section-head">
+    <div class="section-num">3</div>
+    <div class="section-title">三大学派比较
+      <small>欧洲 · 美国 · 中国</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    20世纪系统科学形成三大研究流派，各有侧重：<b>欧洲</b>强调自组织演化机制，<b>美国</b>聚焦适应性主体，<b>中国</b>（钱学森）以人为元素、立足工程实践。
+  </div>
+
+  <div class="school-grid">
+    <div class="school-card school-eu">
+      <div class="flag">🇪🇺</div>
+      <h4>欧洲学派</h4>
+      <div class="sub">自组织理论 · Self-Organization</div>
+      <ul>
+        <li>耗散结构理论（普利高津）</li>
+        <li>协同论（哈肯）</li>
+        <li>突变论（托姆）</li>
+        <li>超循环理论（艾根）</li>
+      </ul>
+      <div class="rep">核心：开放系统在远离平衡态下自发形成有序结构</div>
+    </div>
+
+    <div class="school-card school-us">
+      <div class="flag">🇺🇸</div>
+      <h4>美国学派</h4>
+      <div class="sub">复杂自适应理论 · CAS</div>
+      <ul>
+        <li>圣菲研究所（Santa Fe Institute）</li>
+        <li>霍兰 1994 提出CAS</li>
+        <li>适应性主体 + 涌现</li>
+        <li>遗传算法 / Echo模型</li>
+      </ul>
+      <div class="rep">核心：个体适应环境，整体涌现复杂行为</div>
+    </div>
+
+    <div class="school-card school-cn">
+      <div class="flag">🇨🇳</div>
+      <h4>中国学派</h4>
+      <div class="sub">开放的复杂巨系统理论</div>
+      <ul>
+        <li>钱学森 80年代末提出</li>
+        <li>以人为系统元素</li>
+        <li>从定性到定量综合集成</li>
+        <li>立足工程实践与国情</li>
+      </ul>
+      <div class="rep">核心：人—机结合，专家体系+数据+知识</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. 能源产业 ============ -->
+<section class="section" id="s4">
+  <div class="section-head">
+    <div class="section-num">4</div>
+    <div class="section-title">能源产业 · 整体优化观
+      <small>宏观原则下的全局与长远</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    能源是国计民生底盘，整体优化观要求统筹<b>能源安全—结构—效率—可持续</b>，谋全局、谋万世。
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">83.1%</div><div class="lbl">2025能源自给率</div></div>
+    <div class="kpi"><div class="num blue">32.8%</div><div class="lbl">全球发电量占比</div></div>
+    <div class="kpi"><div class="num red">73.2%</div><div class="lbl">石油对外依存度</div></div>
+    <div class="kpi"><div class="num">10.58万亿</div><div class="lbl">2025发电量(亿千瓦时)</div></div>
+  </div>
+
+  <!-- 自给率趋势 -->
+  <div class="card">
+    <div class="card-h">📊 中国能源自给率走势（2018 → 2025）</div>
+    <div class="bar-block">
+      <div class="bt"><span>2018</span><span>80.3%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:80.3%">80.3%</div></div>
+    </div>
+    <div class="bar-block">
+      <div class="bt"><span>2025（预测）</span><span>83.1%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:83.1%">83.1%</div></div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:8px">↑ 自给率提升约2.8个百分点，能源安全持续改善</p>
+  </div>
+
+  <div class="two-col">
+    <!-- 全球发电对比 -->
+    <div class="card">
+      <div class="card-h">🌍 2025全球发电量 TOP3（亿千瓦时）</div>
+      <div class="bar-block">
+        <div class="bt"><span>🇨🇳 中国</span><span>105,753</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%">105,753</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>🇺🇸 美国</span><span>47,722</span></div>
+        <div class="bar-track"><div class="bar-fill alt" style="width:45.1%">47,722</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>🇮🇳 印度</span><span>20,554</span></div>
+        <div class="bar-track"><div class="bar-fill green" style="width:19.4%">20,554</div></div>
+      </div>
+    </div>
+
+    <!-- 电源结构 -->
+    <div class="card">
+      <div class="card-h">⚡ 2025中国电源结构</div>
+      <div class="bar-block">
+        <div class="bt"><span>火电</span><span>65%</span></div>
+        <div class="bar-track"><div class="bar-fill danger" style="width:65%">65%</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>水电</span><span>14%</span></div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:14%">14%</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>风电</span><span>11%</span></div>
+        <div class="bar-track"><div class="bar-fill green" style="width:11%">11%</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>核电</span><span>5%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:5%"></div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>其他</span><span>5%</span></div>
+        <div class="bar-track"><div class="bar-fill alt" style="width:5%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote">
+    "自古不谋万世者，不足谋一时；不谋全局者，不足谋一域。"
+    <span class="by">— 整体优化观之要义</span>
+  </div>
+</section>
+
+<!-- ============ 5. 钢铁产业 ============ -->
+<section class="section" id="s5">
+  <div class="section-head">
+    <div class="section-num">5</div>
+    <div class="section-title">钢铁产业 · 结构功能观
+      <small>元素 → 结构（功能） → 整体</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    钢铁产业以<b>铁矿石（元素）+ 布局结构（功能）</b>决定整体竞争力。
+    中国是最大生产国，却因<b>铁矿石高度进口</b>受制于四大矿商，需以沿海布局优化结构功能。
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">~10亿吨</div><div class="lbl">2025中国粗钢产量</div></div>
+    <div class="kpi"><div class="num red">12.59亿吨</div><div class="lbl">2025铁矿石进口</div></div>
+    <div class="kpi"><div class="num red">&gt;75%</div><div class="lbl">铁矿石对外依存度</div></div>
+    <div class="kpi"><div class="num blue">~50%</div><div class="lbl">四大矿商全球占比</div></div>
+  </div>
+
+  <!-- 利润对比 -->
+  <div class="card">
+    <div class="card-h">💰 2012-2021 利润对比：中国钢铁 vs 四大矿商</div>
+    <div class="bar-block">
+      <div class="bt"><span>🇨🇳 中国钢铁行业利润</span><span>1.39 万亿元</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:43.4%">1.39万亿</div></div>
+    </div>
+    <div class="bar-block">
+      <div class="bt"><span>⛏️ 四大矿商 EBITDA</span><span>3.20 万亿元</span></div>
+      <div class="bar-track"><div class="bar-fill danger" style="width:100%">3.20万亿</div></div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:8px">
+      ⚠ 矿商利润是钢铁的<b>2.3倍</b>——产业链<b>结构</b>决定利润<b>功能</b>分配
+    </p>
+  </div>
+
+  <div class="two-col">
+    <!-- 四大矿商 -->
+    <div class="card">
+      <div class="card-h">⛏️ 四大矿商（元素端垄断）</div>
+      <div class="tags">
+        <span class="tg">BHP 必和必拓</span>
+        <span class="tg">Rio Tinto 力拓</span>
+        <span class="tg">Vale 淡水河谷</span>
+        <span class="tg">FMG 福特斯克</span>
+      </div>
+      <p style="font-size:13px;color:var(--ink-2);margin-top:8px">
+        四家合计产出全球近<b>一半</b>铁矿石，掌握定价权。
+      </p>
+    </div>
+
+    <!-- 沿海布局 -->
+    <div class="card">
+      <div class="card-h">⚓ 沿海港口布局（结构端优化）</div>
+      <p style="font-size:13px;color:var(--ink-2);margin-bottom:10px">
+        运输占铁矿石成本 <b style="color:var(--amber-d)">30%</b>，沿海港口城市具天然优势。
+      </p>
+      <div class="flow">
+        <span class="node alt">鲅鱼圈</span>
+        <span class="node alt">曹妃甸</span>
+        <span class="node alt">湛江</span>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink-3);margin-top:8px">三大沿海钢铁基地，降低物流、贴近原料</p>
+    </div>
+  </div>
+
+  <!-- 结构功能链 -->
+  <div class="flow" style="justify-content:center;margin-top:24px">
+    <span class="node">铁矿石（元素）</span><span class="arr">→</span>
+    <span class="node alt">沿海布局（结构）</span><span class="arr">→</span>
+    <span class="node">成本竞争力（功能）</span><span class="arr">→</span>
+    <span class="node alt">钢铁强国（整体）</span>
+  </div>
+
+  <!-- 十四五 vs 十五五 -->
+  <div class="task-cols">
+    <div class="task-col">
+      <h5>十四五 · 重点任务</h5>
+      <div class="count">9</div>
+      <div class="lbl" style="font-size:12px;color:var(--ink-3)">项重点任务</div>
+      <ul>
+        <li>产能总量控制与产能置换</li>
+        <li>绿色低碳转型</li>
+        <li>资源保障（铁矿石）</li>
+        <li>产业布局优化</li>
+        <li>技术创新与新材料</li>
+        <li>智能制造</li>
+        <li>兼并重组</li>
+        <li>标准与质量提升</li>
+        <li>国际产能合作</li>
+      </ul>
+    </div>
+    <div class="task-col">
+      <h5>十五五 · 重点任务</h5>
+      <div class="count">6</div>
+      <div class="lbl" style="font-size:12px;color:var(--ink-3)">项重点任务</div>
+      <ul>
+        <li>减量化与碳达峰</li>
+        <li>资源安全与废钢循环</li>
+        <li>高端化与国产替代</li>
+        <li>数智化升级</li>
+        <li>全球化布局</li>
+        <li>产业链韧性</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. 化工产业 ============ -->
+<section class="section" id="s6">
+  <div class="section-head">
+    <div class="section-num">6</div>
+    <div class="section-title">化工产业 · 层次转化观
+      <small>低层次 → 中介（曲折进步） → 高层次</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    化工产业体现"<b>科学思维（从0到1）→ 工程思维（从1到2）</b>"的层次跃迁，
+    从实验室到量产需经"<b>曲折的中介</b>"环节，是层次转化观的典型。
+  </div>
+
+  <!-- 科学 vs 工程 -->
+  <div class="vs-grid">
+    <div class="vs-cell left">
+      <h5>🔬 化学科学思维</h5>
+      <p><span class="badge">从 0 到 1</span> 创新源头</p>
+      <p>• 关注<b>分子反应机理</b></p>
+      <p>• 实验室小试探索</p>
+      <p>• 目标：发现新物质、新反应</p>
+      <p>• 评价：原创性、新颖性</p>
+    </div>
+    <div class="vs-cell right">
+      <h5>🏭 化学工程思维</h5>
+      <p><span class="badge">从 1 到 2</span> 制造根基</p>
+      <p>• 关注<b>放大与连续生产</b></p>
+      <p>• 反应器设计、传质传热</p>
+      <p>• 目标：稳定、安全、规模化</p>
+      <p>• 评价：效率、成本、安全</p>
+    </div>
+  </div>
+
+  <!-- 历史里程碑 -->
+  <div class="card">
+    <div class="card-h">🕰️ 化工技术发展里程碑</div>
+    <div class="timeline" style="padding:20px 0 0">
+      <div class="rail" style="top:32px;min-width:760px"></div>
+      <div class="nodes" style="min-width:760px">
+        <div class="tl-node"><div class="dot" style="margin-top:24px"></div><div class="yr">20s</div><div class="ev">合成氨</div></div>
+        <div class="tl-node"><div class="dot" style="margin-top:24px"></div><div class="yr">40s</div><div class="ev">石油裂化</div></div>
+        <div class="tl-node"><div class="dot" style="margin-top:24px"></div><div class="yr">50s</div><div class="ev">深层发酵</div></div>
+        <div class="tl-node"><div class="dot" style="margin-top:24px"></div><div class="yr">60s</div><div class="ev">乙烯裂解</div></div>
+        <div class="tl-node"><div class="dot" style="margin-top:24px"></div><div class="yr">70s</div><div class="ev">有机硅</div></div>
+        <div class="tl-node"><div class="dot" style="margin-top:24px"></div><div class="yr">80s</div><div class="ev">人工脏器</div></div>
+        <div class="tl-node"><div class="dot" style="margin-top:24px"></div><div class="yr">90s</div><div class="ev">纳米材料</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <!-- 放大方法 -->
+    <div class="card">
+      <div class="card-h">🔬 放大方法演进（中介环节）</div>
+      <div class="flow" style="flex-direction:column;align-items:stretch;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="node" style="min-width:120px;text-align:center">逐级放大</span>
+          <span style="font-size:12px;color:var(--ink-3)">→ 传统经验式，耗时耗材</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="node alt" style="min-width:120px;text-align:center">数值模拟</span>
+          <span style="font-size:12px;color:var(--ink-3)">→ CFD仿真，缩短周期</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="node" style="min-width:120px;text-align:center;background:var(--amber);color:#fff;border-color:var(--amber)">微化工数量放大</span>
+          <span style="font-size:12px;color:var(--ink-3)">→ 并联微通道，本质安全</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PX产能 -->
+    <div class="card">
+      <div class="card-h">📈 PX（对二甲苯）产能跃迁</div>
+      <div class="bar-block">
+        <div class="bt"><span>2017</span><span>1,383 万吨</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:31.4%">1,383</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>2025</span><span>4,401 万吨</span></div>
+        <div class="bar-track"><div class="bar-fill green" style="width:100%">4,401</div></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink-3);margin-top:8px">
+        ↑ 产能增长 <b style="color:var(--amber-d)">3.2倍</b>，突破"卡脖子"，实现层次跃迁
+      </p>
+    </div>
+  </div>
+
+  <!-- BASF -->
+  <div class="card" style="border-left:4px solid var(--amber)">
+    <div class="card-h">🌐 BASF 广东湛江基地</div>
+    <div class="stat-row">
+      <div class="stat"><div class="v">百亿€</div><div class="l">投资规模</div></div>
+      <div class="stat"><div class="v">2030</div><div class="l">预计建成</div></div>
+      <div class="stat"><div class="v">最大</div><div class="l">巴斯夫海外投资</div></div>
+    </div>
+    <p style="font-size:13px;color:var(--ink-2)">
+      德企在华最大单项投资，标志外资看好中国化工长期层次升级机遇。
+    </p>
+  </div>
+
+  <!-- 安全案例 -->
+  <div class="card" style="border-left:4px solid #dc2626">
+    <div class="card-h" style="color:#dc2626">⚠️ 安全事故警示（中介环节失控的代价）</div>
+    <div class="safety-grid">
+      <div class="safety-card">
+        <div class="place">张家口</div><div class="dead">24 死</div><div class="dl">盛华化工气体泄漏爆燃</div>
+      </div>
+      <div class="safety-card">
+        <div class="place">盐城响水</div><div class="dead">78 死</div><div class="dl">天嘉宜化工特大爆炸</div>
+      </div>
+      <div class="safety-card">
+        <div class="place">山东中化</div><div class="dead">10 死</div><div class="dl">危化品储罐爆炸</div>
+      </div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3)">
+      安全是层次转化的"底线中介"——没有安全，谈不上高层次。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 7. 汽车产业 ============ -->
+<section class="section" id="s7">
+  <div class="section-head">
+    <div class="section-num">7</div>
+    <div class="section-title">汽车产业 · 差异协同观
+      <small>差异 → 协同 → 进化</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    汽车产业由各国<b>差异</b>比较优势<b>协同</b>分工，进而<b>进化</b>出规模经济、精益生产与新能源革命。
+  </div>
+
+  <!-- 进化路径 -->
+  <div class="card">
+    <div class="card-h">🛣️ 汽车产业全球进化路径</div>
+    <div class="evo">
+      <div class="evo-step">
+        <div class="flag">🇩🇪</div><div class="country">德国</div>
+        <div class="desc">诞生</div><div class="yr">1886</div>
+      </div>
+      <div class="evo-step">
+        <div class="flag">🇫🇷</div><div class="country">法国</div>
+        <div class="desc">成长</div>
+      </div>
+      <div class="evo-step">
+        <div class="flag">🇺🇸</div><div class="country">美国</div>
+        <div class="desc">成熟（福特T型/流水线）</div>
+      </div>
+      <div class="evo-step">
+        <div class="flag">🇪🇺</div><div class="country">欧洲</div>
+        <div class="desc">兴旺（甲壳虫/高尔夫）</div>
+      </div>
+      <div class="evo-step">
+        <div class="flag">🇯🇵</div><div class="country">亚洲</div>
+        <div class="desc">挑战（丰田TPS）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 规模经济 -->
+  <div class="card">
+    <div class="card-h">📉 规模经济：成本下降的边际递减</div>
+    <div class="bar-block">
+      <div class="bt"><span>1万 → 5万辆</span><span>成本 -40%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:100%">-40%</div></div>
+    </div>
+    <div class="bar-block">
+      <div class="bt"><span>5万 → 10万辆</span><span>-15%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:37.5%">-15%</div></div>
+    </div>
+    <div class="bar-block">
+      <div class="bt"><span>10万 → 20万辆</span><span>-10%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:25%">-10%</div></div>
+    </div>
+    <div class="bar-block">
+      <div class="bt"><span>20万 → 40万辆</span><span>-5%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:12.5%">-5%</div></div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:8px">
+      🎯 <b>最小有效规模：20万辆/年</b>——超过此规模成本优势显著递减
+    </p>
+  </div>
+
+  <div class="two-col">
+    <!-- 集中度 -->
+    <div class="card">
+      <div class="card-h">🏭 市场集中度（Top3 占比）</div>
+      <div class="bar-block">
+        <div class="bt"><span>🇺🇸 美国</span><span>98.5%</span></div>
+        <div class="bar-track"><div class="bar-fill danger" style="width:98.5%">98.5%</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>🇯🇵 日本</span><span>90.6%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:90.6%">90.6%</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>🇨🇳 中国</span><span>37.9%</span></div>
+        <div class="bar-track"><div class="bar-fill alt" style="width:37.9%">37.9%</div></div>
+      </div>
+    </div>
+
+    <!-- 新能源 -->
+    <div class="card">
+      <div class="card-h">🔋 2025 新能源汽车</div>
+      <div class="stat-row">
+        <div class="stat"><div class="v">1,649万</div><div class="l">中国NEV销量(辆)</div></div>
+        <div class="stat"><div class="v">348.4万</div><div class="l">比亚迪销量</div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bt"><span>🌍 全球NEV</span><span>~2,271万辆 · 渗透率23.5%</span></div>
+        <div class="bar-track"><div class="bar-fill green" style="width:100%">2,271万</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 差异协同链 -->
+  <div class="flow" style="justify-content:center;margin-top:20px">
+    <span class="node">奔驰自制率仅23%（差异）</span><span class="arr">→</span>
+    <span class="node alt">全球分工协同</span><span class="arr">→</span>
+    <span class="node">大规模定制生产（进化方向）</span>
+  </div>
+</section>
+
+<!-- ============ 8. 人工智能 ============ -->
+<section class="section" id="s8">
+  <div class="section-head">
+    <div class="section-num">8</div>
+    <div class="section-title">人工智能产业 · 自组涌现观
+      <small>优化式积累 → 层次式进化 → 爆发式涌现</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    AI是<b>自组织+涌现</b>的典范：长期积累在算力/数据/算法协同下，层次跃迁产生涌现式突破（如ChatGPT）。
+  </div>
+
+  <!-- 三大学派 -->
+  <div class="card">
+    <div class="card-h">🧠 AI 三大学派</div>
+    <div class="three-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      <div style="padding:16px;background:#e0f2fe;border-radius:8px;text-align:center">
+        <div style="font-size:28px">🔣</div>
+        <div style="font-weight:700;color:#0369a1;margin-top:4px">符号主义</div>
+        <div style="font-size:12px;color:var(--ink-3)">知识图谱·逻辑推理</div>
+      </div>
+      <div style="padding:16px;background:var(--amber-l);border-radius:8px;text-align:center">
+        <div style="font-size:28px">🕸️</div>
+        <div style="font-weight:700;color:var(--amber-d);margin-top:4px">联结主义</div>
+        <div style="font-size:12px;color:var(--ink-3)">神经网络·深度学习</div>
+      </div>
+      <div style="padding:16px;background:#dcfce7;border-radius:8px;text-align:center">
+        <div style="font-size:28px">🎮</div>
+        <div style="font-weight:700;color:#16a34a;margin-top:4px">行为主义</div>
+        <div style="font-size:12px;color:var(--ink-3)">交互学习·强化学习</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI发展 -->
+  <div class="card">
+    <div class="card-h">📈 AI 发展路径</div>
+    <div class="flow" style="justify-content:center">
+      <span class="node">1956 达特茅斯会议</span><span class="arr">→</span>
+      <span class="node alt">专家系统</span><span class="arr">→</span>
+      <span class="node">机器学习</span><span class="arr">→</span>
+      <span class="node alt" style="background:var(--amber);color:#fff;border-color:var(--amber)">深度学习</span>
+    </div>
+  </div>
+
+  <!-- 深度学习五要素 -->
+  <div class="card">
+    <div class="card-h">🔑 深度学习五要素（天时·地利·人和）</div>
+    <div class="two-col" style="margin-top:8px">
+      <div>
+        <div class="bar-block">
+          <div class="bt"><span>📊 数据</span><span>地利</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+        </div>
+        <div class="bar-block">
+          <div class="bt"><span>🖥️ 算力</span><span>基础</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="bar-block">
+          <div class="bt"><span>🧮 算法</span><span>核心</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="bar-block">
+          <div class="bt"><span>📜 政策</span><span>天时</span></div>
+          <div class="bar-track"><div class="bar-fill green" style="width:75%"></div></div>
+        </div>
+        <div class="bar-block">
+          <div class="bt"><span>💼 商业机会</span><span>人和</span></div>
+          <div class="bar-track"><div class="bar-fill danger" style="width:80%"></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--ink-3);margin-top:8px;text-align:center">
+          五要素协同 → 涌现
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 市值进化 -->
+  <div class="card">
+    <div class="card-h">⏱️ 达到千亿美元市值所需年限</div>
+    <div class="bar-block">
+      <div class="bt"><span>塔塔集团</span><span>~150 年</span></div>
+      <div class="bar-track"><div class="bar-fill alt" style="width:100%">150年</div></div>
+    </div>
+    <div class="bar-block">
+      <div class="bt"><span>谷歌</span><span>~7 年</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:4.7%">7年</div></div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:8px">
+      ⚡ 涌现加速：科技企业的"时间"被重新定义
+    </p>
+  </div>
+
+  <div class="two-col">
+    <!-- 2026热点 -->
+    <div class="card">
+      <div class="card-h">🔥 2026 三大热点</div>
+      <div class="tags">
+        <span class="tg">💬 ChatGPT</span>
+        <span class="tg blue">🚗 自动驾驶</span>
+        <span class="tg green">🤖 具身智能/人形机器人</span>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:var(--amber-xl);border-radius:8px">
+        <div style="font-weight:700;color:var(--amber-d);font-size:14px">🇨🇳 人形机器人</div>
+        <div style="font-size:13px;color:var(--ink-2);margin-top:4px">
+          2026<b>爆发元年</b> · 产量预计<b style="color:var(--amber-d)">年增94%</b><br>
+          整机企业超 <b style="color:var(--amber-d)">140家</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- 特征 -->
+    <div class="card">
+      <div class="card-h">🏷️ AI产业六大特征</div>
+      <div class="tags">
+        <span class="tg">跨学科</span>
+        <span class="tg blue">数据驱动</span>
+        <span class="tg green">技术密集</span>
+        <span class="tg">广泛应用</span>
+        <span class="tg green">可持续</span>
+        <span class="tg red">面临挑战</span>
+      </div>
+      <div style="margin-top:14px;font-size:13px;color:var(--ink-2)">
+        <b style="color:var(--amber-d)">✅ AI成功要素：</b><br>
+        数据 + 容错 + 封闭可控 + 生产力 + 成熟
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. 收束 ============ -->
+<section class="section" id="s9">
+  <div class="section-head">
+    <div class="section-num">9</div>
+    <div class="section-title">收束：如众灯明，各遍似一
+      <small>五观归一 · 系统思维统一图景</small>
+    </div>
+  </div>
+  <div class="section-lead">
+    五观并非割裂，而是从<b>不同侧面</b>审视同一系统：整体、结构、层次、差异、涌现——
+    犹如众灯之光，各遍一室，似为一明。
+  </div>
+
+  <div class="converge">
+    <div class="node5 n1">整体优化观<br>⚡能源</div>
+    <div class="node5 n2">结构功能观<br>🏗️钢铁</div>
+    <div class="node5 n3">差异协同观<br>🚗汽车</div>
+    <div class="node5 n4">层次转化观<br>⚗️化工</div>
+    <div class="node5 n5">自组涌现观<br>🤖AI</div>
+    <div class="center">系统思维<br>统一图景</div>
+  </div>
+
+  <div class="quote" style="text-align:center;font-size:18px;margin-top:30px">
+    "如众灯明，各遍似一。"
+    <span class="by" style="text-align:center">— 五观归一，系统思维之全</span>
+  </div>
+
+  <div class="quote" style="background:linear-gradient(135deg,#1f2937,#374151);color:#fff;border-left-color:var(--amber)">
+    "开放的复杂巨系统，需要从定性到定量的综合集成方法——
+    以人为主、人机结合，把专家体系、数据与知识体系熔为一炉。"
+    <span class="by" style="color:#FCD34D">— 钱学森</span>
+  </div>
+
+  <div class="flow" style="justify-content:center;margin-top:24px">
+    <span class="node">整体优化</span><span class="arr">+</span>
+    <span class="node alt">结构功能</span><span class="arr">+</span>
+    <span class="node">层次转化</span><span class="arr">+</span>
+    <span class="node alt">差异协同</span><span class="arr">+</span>
+    <span class="node">自组涌现</span><span class="arr">=</span>
+    <span class="node" style="background:var(--amber);color:#fff;border-color:var(--amber)">产业系统思维</span>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>产业视角下的系统思维 · 清华大学讲座 · 主讲：汤彬</p>
+    <p style="margin-top:6px">本可视化基于讲座内容整理 · <b>五观映射 · 三大学派 · 五大产业</b></p>
+  </div>
+</footer>
+
+</body>
+</html>

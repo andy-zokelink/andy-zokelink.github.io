@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 设计工具调研 · 结构 + 电子 | 2026 横向对比与推荐方案</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --amber: #F59E0B;
+  --amber-light: #FEF3C7;
+  --amber-dark: #D97706;
+  --amber-50: #FFFBEB;
+  --blue-tint: #F0F7FF;
+  --blue-tint-2: #E0EDFF;
+  --green-tint: #F0FDF4;
+  --green-tint-2: #DCFCE7;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  --green-500: #10B981;
+  --red-400: #F87171;
+  --red-500: #EF4444;
+  --blue-500: #3B82F6;
+  --blue-600: #2563EB;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #FFFFFF;
+  color: var(--gray-800);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FFFFFF 50%, #F0F7FF 100%);
+  padding: 72px 0 56px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--amber);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.3);
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero h1 {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 800;
+  color: var(--gray-900);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.hero h1 .accent {
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(15px, 2.5vw, 19px);
+  color: var(--gray-600);
+  max-width: 760px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--amber-dark);
+}
+
+.hero-stat-label {
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+/* ===== Section Headers ===== */
+.section {
+  padding: 64px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.section-tag.structural {
+  background: var(--blue-tint-2);
+  color: var(--blue-600);
+}
+
+.section-tag.electronic {
+  background: var(--green-tint-2);
+  color: #15803D;
+}
+
+.section-tag.recommendation {
+  background: var(--amber-light);
+  color: var(--amber-dark);
+}
+
+.section h2 {
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 800;
+  color: var(--gray-900);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--gray-500);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ===== Tool Cards Grid ===== */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  margin-bottom: 56px;
+}
+
+.tool-card {
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.tool-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--gray-300);
+}
+
+.tool-card.structural { border-top: 4px solid var(--blue-500); }
+.tool-card.electronic { border-top: 4px solid #10B981; }
+
+.tool-card-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.tool-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.tool-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.tool-card.structural .tool-icon {
+  background: var(--blue-tint);
+}
+
+.tool-card.electronic .tool-icon {
+  background: var(--green-tint);
+}
+
+.tool-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.3;
+}
+
+.tool-positioning {
+  font-size: 12px;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+.tool-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--amber-50);
+  color: var(--amber-dark);
+}
+
+.tool-card-body {
+  padding: 20px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tool-info-row {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tool-info-label {
+  color: var(--gray-500);
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 64px;
+}
+
+.tool-info-value {
+  color: var(--gray-700);
+  flex: 1;
+}
+
+.tool-scores {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0;
+  border-top: 1px dashed var(--gray-200);
+  border-bottom: 1px dashed var(--gray-200);
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-label {
+  font-size: 12px;
+  color: var(--gray-600);
+  font-weight: 600;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.score-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--gray-100);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber) 0%, var(--amber-dark) 100%);
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.score-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-700);
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.tool-pros-cons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pros, .cons {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pros-icon {
+  color: var(--green-500);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.cons-icon {
+  color: var(--red-500);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.pros-text, .cons-text {
+  color: var(--gray-700);
+}
+
+.tool-suitable {
+  margin-top: auto;
+  padding: 12px 24px;
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-100);
+  font-size: 13px;
+  color: var(--gray-600);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-suitable strong {
+  color: var(--amber-dark);
+}
+
+/* ===== Comparison Matrix ===== */
+.matrix-wrapper {
+  overflow-x: auto;
+  margin-bottom: 8px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.comparison-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  background: #fff;
+}
+
+.comparison-matrix thead th {
+  background: var(--gray-800);
+  color: #fff;
+  padding: 14px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+}
+
+.comparison-matrix thead th:first-child {
+  text-align: left;
+  border-radius: var(--radius-lg) 0 0 0;
+}
+
+.comparison-matrix tbody td {
+  padding: 14px 16px;
+  font-size: 13px;
+  text-align: center;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+
+.comparison-matrix tbody td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.comparison-matrix tbody tr:nth-child(even) {
+  background: var(--gray-50);
+}
+
+.comparison-matrix tbody tr:hover {
+  background: var(--amber-50);
+}
+
+/* Cell badges */
+.cell-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cell-bar-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.cell-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gray-200);
+}
+
+.cell-dot.filled {
+  background: var(--amber);
+}
+
+.cell-deploy {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  white-space: nowrap;
+}
+
+.best-cell {
+  background: var(--amber-50) !important;
+  position: relative;
+}
+
+.best-cell::after {
+  content: '★';
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  font-size: 10px;
+  color: var(--amber);
+}
+
+/* Star rating in matrix */
+.star-rating {
+  display: inline-flex;
+  gap: 1px;
+}
+
+.star {
+  font-size: 14px;
+  color: var(--gray-300);
+}
+
+.star.filled {
+  color: var(--amber);
+}
+
+/* ===== Recommendation Section ===== */
+.recommendation-section {
+  background: linear-gradient(180deg, var(--amber-50) 0%, #FFFFFF 100%);
+  border-top: 1px solid var(--amber-light);
+  border-bottom: 1px solid var(--amber-light);
+}
+
+.optimal-combo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 768px) {
+  .optimal-combo {
+    grid-template-columns: 1fr;
+  }
+}
+
+.combo-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.combo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--amber) 0%, var(--amber-dark) 100%);
+}
+
+.combo-card.structural {
+  border-color: var(--blue-tint-2);
+}
+
+.combo-card.structural::before {
+  background: linear-gradient(90deg, var(--blue-500) 0%, var(--blue-600) 100%);
+}
+
+.combo-card.electronic::before {
+  background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+}
+
+.combo-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.combo-card.structural h3 .line-icon {
+  background: var(--blue-tint);
+  color: var(--blue-600);
+}
+
+.combo-card.electronic h3 .line-icon {
+  background: var(--green-tint);
+  color: #15803D;
+}
+
+.line-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.combo-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--gray-200);
+}
+
+.combo-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.combo-role {
+  flex-shrink: 0;
+  width: 80px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-align: center;
+  height: fit-content;
+}
+
+.combo-role.main {
+  background: var(--amber);
+  color: #fff;
+}
+
+.combo-role.aux {
+  background: var(--amber-light);
+  color: var(--amber-dark);
+}
+
+.combo-role.frontend {
+  background: var(--green-tint-2);
+  color: #15803D;
+}
+
+.combo-role.optional {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.combo-detail {
+  flex: 1;
+}
+
+.combo-detail-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 2px;
+}
+
+.combo-detail-desc {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+/* ===== Roadmap ===== */
+.roadmap {
+  position: relative;
+  margin-top: 16px;
+}
+
+.roadmap-track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .roadmap-track {
+    grid-template-columns: 1fr;
+  }
+}
+
+.roadmap-track::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  left: 12%;
+  right: 12%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--amber) 0%, var(--amber-dark) 50%, var(--amber) 100%);
+  border-radius: 2px;
+  z-index: 0;
+}
+
+@media (max-width: 900px) {
+  .roadmap-track::before {
+    display: none;
+  }
+}
+
+.phase-card {
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: 0 0 24px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.phase-card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-3px);
+}
+
+.phase-header {
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
+  color: #fff;
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.phase-num {
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phase-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.phase-time {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.phase-body {
+  padding: 20px 24px;
+}
+
+.phase-action {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--gray-200);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.phase-action:last-of-type {
+  border-bottom: none;
+}
+
+.phase-action-tag {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  height: fit-content;
+  white-space: nowrap;
+}
+
+.phase-action-tag.struct {
+  background: var(--blue-tint);
+  color: var(--blue-600);
+}
+
+.phase-action-tag.elec {
+  background: var(--green-tint);
+  color: #15803D;
+}
+
+.phase-action-tag.both {
+  background: var(--amber-light);
+  color: var(--amber-dark);
+}
+
+.phase-action-text {
+  color: var(--gray-700);
+}
+
+.phase-goal {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--amber-50);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--amber-dark);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.phase-goal-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ===== Summary Section ===== */
+.summary-section {
+  background: var(--gray-900);
+  padding: 64px 0;
+  text-align: center;
+}
+
+.summary-section .section-tag {
+  background: rgba(245,158,11,0.15);
+  color: var(--amber);
+}
+
+.summary-quote {
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 700;
+  color: #fff;
+  max-width: 880px;
+  margin: 16px auto 0;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+.summary-quote .highlight {
+  color: var(--amber);
+}
+
+.summary-quote .arrow {
+  color: var(--amber);
+  font-weight: 800;
+}
+
+.summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.summary-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.summary-tag .check {
+  color: var(--amber);
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: var(--gray-50);
+  padding: 32px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gray-400);
+  border-top: 1px solid var(--gray-200);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .container { padding: 0 16px; }
+  .hero { padding: 48px 0 40px; }
+  .hero-stats { gap: 24px; }
+  .hero-stat-num { font-size: 24px; }
+  .section { padding: 48px 0; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .tool-card-body { padding: 16px; }
+  .tool-card-header { padding: 16px; }
+  .phase-body { padding: 16px; }
+  .phase-header { padding: 16px; }
+  .combo-card { padding: 20px; }
+}
+
+/* Animation for bars on load */
+@keyframes growBar {
+  from { width: 0; }
+  to { width: var(--target-width); }
+}
+
+.score-bar-fill {
+  animation: growBar 0.8s ease-out forwards;
+}
+
+/* Nav */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 10px 0;
+}
+
+.nav-inner {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-500);
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background: var(--amber-50);
+  color: var(--amber-dark);
+}
+
+.nav-link.active {
+  background: var(--amber);
+  color: #fff;
+}
+
+/* Connector arrow between cards in roadmap */
+.phase-arrow {
+  position: absolute;
+  top: 24px;
+  right: -16px;
+  width: 32px;
+  height: 32px;
+  background: var(--amber);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.3);
+}
+
+@media (max-width: 900px) {
+  .phase-arrow { display: none; }
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot.best { background: var(--amber); }
+.legend-dot.normal { background: var(--gray-200); }
+</style>
+</head>
+<body>
+
+<!-- ===== Navigation Bar ===== -->
+<nav class="nav-bar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#structural" class="nav-link">结构设计</a>
+      <a href="#electronic" class="nav-link">电子设计</a>
+      <a href="#recommendation" class="nav-link">推荐方案</a>
+      <a href="#summary" class="nav-link">总结</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Hero Section ===== -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        调研日期 2026-08-15
+      </div>
+      <h1>AI 设计工具调研 · <span class="accent">结构 + 电子</span></h1>
+      <p class="hero-subtitle">AutoCAD/UG → AI CAD ｜ PADS/OrCAD → AI EDA ｜ 2026 横向对比与推荐方案</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">5</div>
+          <div class="hero-stat-label">结构设计工具</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">6</div>
+          <div class="hero-stat-label">电子设计工具</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-label">推进阶段</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">6</div>
+          <div class="hero-stat-label">月落地周期</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Section 2: Structural Design AI Tools ===== -->
+<section class="section" id="structural" style="background: var(--blue-tint);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag structural">⚙️ 结构设计</span>
+      <h2>结构设计 AI 工具对比</h2>
+      <p class="section-desc">5 款主流 AI 增强 CAD 工具横向评测，覆盖兼容性、AI 成熟度、性价比三大维度</p>
+    </div>
+
+    <!-- Tool Cards -->
+    <div class="tools-grid">
+      <!-- Tool 1: Siemens NX 2025 -->
+      <div class="tool-card structural">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🏭</div>
+            <div>
+              <div class="tool-name">Siemens NX 2025</div>
+              <div class="tool-positioning">定位：UG 正统进化</div>
+            </div>
+          </div>
+          <span class="tool-tag">UG 零迁移</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">生成式设计 + 拓扑优化 + 收敛建模</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">.prt 原生（UG 零迁移）</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">仿真集成</span>
+            <span class="tool-info-value">Simcenter + Teamcenter PLM</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">本地 + 云</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">原厂正统，文件零障碍，功能全面</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">授权费高，学习曲线陡</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>UG 工程师直接升级</strong>
+        </div>
+      </div>
+
+      <!-- Tool 2: Autodesk Fusion 360 2026 -->
+      <div class="tool-card structural">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">📐</div>
+            <div>
+              <div class="tool-name">Autodesk Fusion 360 2026</div>
+              <div class="tool-positioning">定位：AutoCAD 同门 AI 方案</div>
+            </div>
+          </div>
+          <span class="tool-tag">性价比最高</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">生成式智能引擎(GIE) + 拓扑优化 + AutoConstrain</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">.dwg 直接导入</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">仿真集成</span>
+            <span class="tool-info-value">内置仿真扩展</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">云端优先</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">中小团队性价比最高，.dwg 兼容无忧，2026 GIE 引擎突破</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">云端依赖，复杂曲面不如 NX</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>AutoCAD 工程师 AI 升级首选</strong>
+        </div>
+      </div>
+
+      <!-- Tool 3: SOLIDWORKS 2026 -->
+      <div class="tool-card structural">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🔧</div>
+            <div>
+              <div class="tool-name">SOLIDWORKS 2026（达索）</div>
+              <div class="tool-positioning">定位：AI 助手 AURA</div>
+            </div>
+          </div>
+          <span class="tool-tag">AI 功能最全</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">12 项 AI 功能（拓扑优化 / 自动装配 / 指令预测器 / AURA 助手）</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">支持导入 .dwg / .prt</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">仿真集成</span>
+            <span class="tool-info-value">3DEXPERIENCE 平台</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">需连 3DEXPERIENCE 云</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">AI 功能最全面，AURA 能文字生成装配结构</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">AI 需云连接，桌面用户需迁移 3DEXPERIENCE，平台锁定</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>愿意上云的团队</strong>
+        </div>
+      </div>
+
+      <!-- Tool 4: PTC Creo 12 -->
+      <div class="tool-card structural">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🏗️</div>
+            <div>
+              <div class="tool-name">PTC Creo 12 + Onshape Labs</div>
+              <div class="tool-positioning">定位：生成式设计 + 云原生</div>
+            </div>
+          </div>
+          <span class="tool-tag">云原生</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">GTO / GDX 生成式设计 + Onshape AI 早期体验</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">支持导入主流格式</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">仿真集成</span>
+            <span class="tool-info-value">Creo Simulation</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">Creo 本地 + Onshape 云端</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">GDX 百种方案并行探索</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">AI 能力偏早期，Onshape 功能不成熟</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>已有 PTC 生态的团队</strong>
+        </div>
+      </div>
+
+      <!-- Tool 5: nTopology -->
+      <div class="tool-card structural">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🧬</div>
+            <div>
+              <div class="tool-name">nTopology</div>
+              <div class="tool-positioning">定位：复杂几何专用</div>
+            </div>
+          </div>
+          <span class="tool-tag">补充工具</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">隐式建模 + 晶格结构生成</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">STEP / STL 导出</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">仿真集成</span>
+            <span class="tool-info-value">独立平台</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">本地</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 40%; --target-width: 40%;"></div></div>
+              <span class="score-value">2/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">传统 CAD 做不了的复杂几何（散热器 / 晶格 / 陀螺体）</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">不做主力平台，需配合其他 CAD</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>补充工具，非主力</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Matrix -->
+    <div class="section-header" style="margin-bottom: 24px;">
+      <h2 style="font-size: 22px;">📊 结构设计工具对比矩阵</h2>
+    </div>
+    <div class="matrix-wrapper">
+      <table class="comparison-matrix">
+        <thead>
+          <tr>
+            <th>工具</th>
+            <th>兼容现有格式</th>
+            <th>AI 能力</th>
+            <th>部署方式</th>
+            <th>性价比</th>
+            <th>推荐指数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- NX 2025 -->
+          <tr>
+            <td>Siemens NX 2025</td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td><span class="cell-deploy">本地 + 云</span></td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+          <!-- Fusion 360 -->
+          <tr>
+            <td>Autodesk Fusion 360</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td><span class="cell-deploy">云端优先</span></td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span></span>
+            </td>
+          </tr>
+          <!-- SOLIDWORKS -->
+          <tr>
+            <td>SOLIDWORKS 2026</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td><span class="cell-deploy">3DE 云</span></td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+          <!-- PTC Creo -->
+          <tr>
+            <td>PTC Creo 12 + Onshape</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td><span class="cell-deploy">本地 + 云</span></td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+          <!-- nTopology -->
+          <tr>
+            <td>nTopology</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>2/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td><span class="cell-deploy">本地</span></td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot best"></span> 该列最优</div>
+      <div class="legend-item"><span class="legend-dot normal"></span> 普通水平</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 3: Electronic Design AI Tools ===== -->
+<section class="section" id="electronic" style="background: var(--green-tint);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag electronic">🔌 电子设计</span>
+      <h2>电子设计 AI 工具对比</h2>
+      <p class="section-desc">6 款主流 AI 增强 EDA 工具横向评测，从 OrCAD / PADS 迁移路径全覆盖</p>
+    </div>
+
+    <!-- Tool Cards -->
+    <div class="tools-grid">
+      <!-- Tool 1: Cadence OrCAD X -->
+      <div class="tool-card electronic">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🎯</div>
+            <div>
+              <div class="tool-name">Cadence OrCAD X 2024</div>
+              <div class="tool-positioning">定位：OrCAD 正统进化</div>
+            </div>
+          </div>
+          <span class="tool-tag">零迁移</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">AI 布局布线 + Presto PCB 编辑器 + BOM 预测分析</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">.sch / .brd 原生</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">本地 + 云</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">原厂零迁移，AI 功能已落地</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">授权费高</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>OrCAD 工程师直接升级</strong>
+        </div>
+      </div>
+
+      <!-- Tool 2: Altium Designer 365 -->
+      <div class="tool-card electronic">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🏆</div>
+            <div>
+              <div class="tool-name">Altium Designer 365</div>
+              <div class="tool-positioning">定位：行业金标准 + AI</div>
+            </div>
+          </div>
+          <span class="tool-tag">行业标准</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">ActiveRoute AI 布线 + AI 元器件选型 + 云协作</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">可导入 OrCAD / PADS 文件</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">本地 + 云（Altium 365）</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">行业标准，AI 布线理解设计意图，生态最完整</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">迁移成本，授权费</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>统一到更强平台</strong>
+        </div>
+      </div>
+
+      <!-- Tool 3: CELUS -->
+      <div class="tool-card electronic">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🤖</div>
+            <div>
+              <div class="tool-name">CELUS</div>
+              <div class="tool-positioning">定位：AI 原理图自动生成</div>
+            </div>
+          </div>
+          <span class="tool-tag">前端提效</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">功能需求 → 原理图 + BOM + 布局规划，CUBO 元器件知识库</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">导出 Altium / KiCad / Eagle 工程</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">云端</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">从需求到原理图自动化，与西门子合作</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">不替代后端 EDA，需配合使用</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>前端概念设计提效</strong>
+        </div>
+      </div>
+
+      <!-- Tool 4: Flux.ai -->
+      <div class="tool-card electronic">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">💬</div>
+            <div>
+              <div class="tool-name">Flux.ai</div>
+              <div class="tool-positioning">定位：浏览器端 AI Copilot</div>
+            </div>
+          </div>
+          <span class="tool-tag">免费起步</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">对话式 AI 助手 + 文字生成电路 + 实时协作</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">支持导入导出主流格式</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">纯云端</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">免费起步，对话式交互门槛低</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">复杂板子能力有限</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>快速原型 + 团队协作</strong>
+        </div>
+      </div>
+
+      <!-- Tool 5: Quilter -->
+      <div class="tool-card electronic">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">⚡</div>
+            <div>
+              <div class="tool-name">Quilter</div>
+              <div class="tool-positioning">定位：AI 自主 PCB 布局</div>
+            </div>
+          </div>
+          <span class="tool-tag">数周→数小时</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">基于物理的 AI，自动元件布局 + 布线</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">与现有工作流集成</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">本地可选（保护 IP）</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 80%; --target-width: 80%;"></div></div>
+              <span class="score-value">4/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">数周 → 数小时，支持本地部署</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">复杂高速板能力待验证</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>中低复杂度板子快速出图</strong>
+        </div>
+      </div>
+
+      <!-- Tool 6: 嘉立创EDA -->
+      <div class="tool-card electronic">
+        <div class="tool-card-header">
+          <div class="tool-card-title-row">
+            <div class="tool-icon">🇨🇳</div>
+            <div>
+              <div class="tool-name">嘉立创 EDA</div>
+              <div class="tool-positioning">定位：国产免费 + 智能布线</div>
+            </div>
+          </div>
+          <span class="tool-tag">完全免费</span>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-info-row">
+            <span class="tool-info-label">AI 能力</span>
+            <span class="tool-info-value">自研 AI 布线算法 + 智能 DFM 检测</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">文件兼容</span>
+            <span class="tool-info-value">支持导入 AD / OrCAD 工程</span>
+          </div>
+          <div class="tool-info-row">
+            <span class="tool-info-label">部署方式</span>
+            <span class="tool-info-value">云端</span>
+          </div>
+          <div class="tool-scores">
+            <div class="score-row">
+              <span class="score-label">兼容性</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">AI 成熟度</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; --target-width: 60%;"></div></div>
+              <span class="score-value">3/5</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label">性价比</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width: 100%; --target-width: 100%;"></div></div>
+              <span class="score-value">5/5</span>
+            </div>
+          </div>
+          <div class="tool-pros-cons">
+            <div class="pros"><span class="pros-icon">✓</span><span class="pros-text">免费，658 万用户，百万封装库，与立创商城 + PCBA 一站式</span></div>
+            <div class="cons"><span class="cons-icon">✕</span><span class="cons-text">不适合复杂高速设计</span></div>
+          </div>
+        </div>
+        <div class="tool-suitable">
+          🎯 适合：<strong>简单板子快速打样</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Matrix -->
+    <div class="section-header" style="margin-bottom: 24px;">
+      <h2 style="font-size: 22px;">📊 电子设计工具对比矩阵</h2>
+    </div>
+    <div class="matrix-wrapper">
+      <table class="comparison-matrix">
+        <thead>
+          <tr>
+            <th>工具</th>
+            <th>兼容现有格式</th>
+            <th>AI 能力</th>
+            <th>部署方式</th>
+            <th>性价比</th>
+            <th>推荐指数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- OrCAD X -->
+          <tr>
+            <td>Cadence OrCAD X</td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td><span class="cell-deploy">本地 + 云</span></td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+          <!-- Altium -->
+          <tr>
+            <td>Altium Designer 365</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td><span class="cell-deploy">本地 + 云</span></td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span></span>
+            </td>
+          </tr>
+          <!-- CELUS -->
+          <tr>
+            <td>CELUS</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="card-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td><span class="cell-deploy">云端</span></td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+          <!-- Flux.ai -->
+          <tr>
+            <td>Flux.ai</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td><span class="cell-deploy">纯云端</span></td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+          <!-- Quilter -->
+          <tr>
+            <td>Quilter</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td><span class="cell-deploy">本地可选</span></td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span></div><span>4/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+          <!-- 嘉立创 -->
+          <tr>
+            <td>嘉立创 EDA</td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td>
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot"></span><span class="cell-dot"></span></div><span>3/5</span></div>
+            </td>
+            <td><span class="cell-deploy">云端</span></td>
+            <td class="best-cell">
+              <div class="cell-bar"><div class="cell-bar-dots"><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span><span class="cell-dot filled"></span></div><span>5/5</span></div>
+            </td>
+            <td>
+              <span class="star-rating"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span><span class="star">★</span></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot best"></span> 该列最优</div>
+      <div class="legend-item"><span class="legend-dot normal"></span> 普通水平</svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 4: Recommendation ===== -->
+<section class="section recommendation-section" id="recommendation">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag recommendation">🎯 推荐方案</span>
+      <h2>推荐方案 — 最优组合</h2>
+      <p class="section-desc">基于现有工具栈的零障碍升级路径，结构 + 电子双线并行推进</p>
+    </div>
+
+    <!-- Optimal Combination Cards -->
+    <div class="optimal-combo">
+      <!-- Structural Line -->
+      <div class="combo-card structural">
+        <h3><span class="line-icon">⚙️</span> 结构线</h3>
+        <div class="combo-item">
+          <span class="combo-role main">主力</span>
+          <div class="combo-detail">
+            <div class="combo-detail-name">Siemens NX 2025</div>
+            <div class="combo-detail-desc">UG 升级 — .prt 零迁移，原厂正统进化</div>
+          </div>
+        </div>
+        <div class="combo-item">
+          <span class="combo-role aux">辅助</span>
+          <div class="combo-detail">
+            <div class="combo-detail-name">Autodesk Fusion 360 2026</div>
+            <div class="combo-detail-desc">AutoCAD 升级 — .dwg 兼容 + GIE 引擎</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Electronic Line -->
+      <div class="combo-card electronic">
+        <h3><span class="line-icon">🔌</span> 电子线</h3>
+        <div class="combo-item">
+          <span class="combo-role main">主力</span>
+          <div class="combo-detail">
+            <div class="combo-detail-name">Cadence OrCAD X</div>
+            <div class="combo-detail-desc">OrCAD 升级 — .sch/.brd 零迁移</div>
+          </div>
+        </div>
+        <div class="combo-item">
+          <span class="combo-role frontend">前端提效</span>
+          <div class="combo-detail">
+            <div class="combo-detail-name">CELUS</div>
+            <div class="combo-detail-desc">需求 → 原理图自动化</div>
+          </div>
+        </div>
+        <div class="combo-item">
+          <span class="combo-role optional">可选统一</span>
+          <div class="combo-detail">
+            <div class="combo-detail-name">Altium Designer 365</div>
+            <div class="combo-detail-desc">PADS 迁移目标 — 行业标准 + AI 最强</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="section-header" style="margin-bottom: 24px;">
+      <h2 style="font-size: 22px;">🗺️ 推进路线图</h2>
+      <p class="section-desc" style="margin-top: 8px;">3 阶段 · 6 个月落地周期</p>
+    </div>
+
+    <div class="roadmap">
+      <div class="roadmap-track">
+        <!-- Phase 1 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-num">Phase 1</div>
+            <div class="phase-title">试点验证</div>
+            <div class="phase-time">第 1-2 月</div>
+          </div>
+          <div class="phase-body">
+            <div class="phase-action">
+              <span class="phase-action-tag struct">结构</span>
+              <span class="phase-action-text">NX 2025 升级现有 UG 授权，1-2 名工程师试用生成式设计</span>
+            </div>
+            <div class="phase-action">
+              <span class="phase-action-tag elec">电子</span>
+              <span class="phase-action-text">OrCAD X 升级现有 OrCAD，试用 Presto PCB 编辑器</span>
+            </div>
+            <div class="phase-action">
+              <span class="phase-action-tag both">同时</span>
+              <span class="phase-action-text">CELUS 免费试用，验证原理图自动生成效果</span>
+            </div>
+            <div class="phase-goal">
+              <span class="phase-goal-label">🎯 目标</span>
+              <span>验证 AI 功能实际提效幅度</span>
+            </div>
+          </div>
+          <div class="phase-arrow">→</div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-num">Phase 2</div>
+            <div class="phase-title">团队推广</div>
+            <div class="phase-time">第 3-4 月</div>
+          </div>
+          <div class="phase-body">
+            <div class="phase-action">
+              <span class="phase-action-tag struct">结构</span>
+              <span class="phase-action-text">Fusion 360 部署给 AutoCAD 工程师，云协作试点</span>
+            </div>
+            <div class="phase-action">
+              <span class="phase-action-tag elec">电子</span>
+              <span class="phase-action-text">评估 PADS 工程师是否迁移 Altium 365</span>
+            </div>
+            <div class="phase-action">
+              <span class="phase-action-tag both">条件</span>
+              <span class="phase-action-text">CELUS 验证通过则前端设计流程标准化</span>
+            </div>
+            <div class="phase-goal">
+              <span class="phase-goal-label">🎯 目标</span>
+              <span>全员上手，建立 AI 设计规范</span>
+            </div>
+          </div>
+          <div class="phase-arrow">→</div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-num">Phase 3</div>
+            <div class="phase-title">深度整合</div>
+            <div class="phase-time">第 5-6 月</div>
+          </div>
+          <div class="phase-body">
+            <div class="phase-action">
+              <span class="phase-action-tag struct">结构</span>
+              <span class="phase-action-text">NX 生成式设计 + Simcenter 仿真闭环</span>
+            </div>
+            <div class="phase-action">
+              <span class="phase-action-tag elec">电子</span>
+              <span class="phase-action-text">OrCAD X / Altium + CELUS 全流程打通</span>
+            </div>
+            <div class="phase-action">
+              <span class="phase-action-tag both">评估</span>
+              <span class="phase-action-text">nTopology（复杂几何）和 Quilter（快速布局）是否补充</span>
+            </div>
+            <div class="phase-goal">
+              <span class="phase-goal-label">🎯 目标</span>
+              <span>AI 工具链与现有 PLM/PDM 系统深度集成</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 5: Summary ===== -->
+<section class="summary-section" id="summary">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag recommendation">💡 一句话总结</span>
+    </div>
+    <p class="summary-quote">
+      最优路径：<span class="highlight">不换工具，升级工具</span>。<br>
+      <span class="highlight">NX</span> 升级 UG <span class="arrow">→</span>
+      <span class="highlight">OrCAD X</span> 升级 OrCAD <span class="arrow">→</span>
+      <span class="highlight">Fusion 360</span> 升级 AutoCAD <span class="arrow">→</span>
+      <span class="highlight">CELUS</span> 加速前端<br>
+      <span style="font-size: 0.85em; opacity: 0.7;">所有现有文件格式零障碍，AI 提效立即可用。</span>
+    </p>
+    <div class="summary-tags">
+      <span class="summary-tag"><span class="check">✓</span> 文件零迁移</span>
+      <span class="summary-tag"><span class="check">✓</span> AI 提效立即可用</span>
+      <span class="summary-tag"><span class="check">✓</span> 6 个月落地</span>
+      <span class="summary-tag"><span class="check">✓</span> 结构 + 电子双线并行</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="container">
+    AI 设计工具调研报告 · 2026-08-15 · 结构设计 + 电子设计横向对比
+  </div>
+</footer>
+
+<script>
+// Nav active state on scroll
+(function() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('section[id], header[id]');
+
+  function updateActiveNav() {
+    let current = '';
+    const scrollPos = window.scrollY + 120;
+
+    sections.forEach(section => {
+      if (section.offsetTop <= scrollPos) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveNav);
+  updateActiveNav();
+
+  // Animate score bars on scroll into view
+  const scoreBars = document.querySelectorAll('.score-bar-fill');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const targetWidth = entry.target.style.getPropertyValue('--target-width');
+        if (targetWidth) {
+          entry.target.style.width = '0%';
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              entry.target.style.width = targetWidth;
+            }, 50);
+          });
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  scoreBars.forEach(bar => observer.observe(bar));
+})();
+</script>
+
+</body>
+</html>

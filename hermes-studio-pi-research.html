@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hermes Studio（AI 中台）与 Pi Agent（极简编程）能力挖掘深度调研——有哪些你还不知道的能力，别人都在拿它们做什么。">
+<title>调研 · Hermes Studio × Pi Agent 能力挖掘</title>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Ma+Shan+Zheng&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans SC','LXGW WenKai',sans-serif;background:#FAF7F2;color:#3B3830;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(250,247,242,.92);backdrop-filter:blur(10px);border-bottom:1px solid #ECE6DB}
+.topbar-in{max-width:1020px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:700;color:#8B7355;font-size:15px;display:flex;align-items:center;gap:8px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:#C4A77D;display:inline-block}
+nav.bn a{color:#8B7355;text-decoration:none;font-size:14px;margin-left:18px;font-weight:600;opacity:.85;transition:.2s}
+nav.bn a:hover{opacity:1;color:#B98A4E}
+
+/* hero */
+header.hero{padding:64px 0 30px;text-align:center}
+.kicker{display:inline-block;font-size:13px;color:#B98A4E;font-weight:700;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.28);padding:6px 16px;border-radius:20px;letter-spacing:.5px}
+h1.title{font-family:'Ma Shan Zheng','Noto Sans SC',serif;font-size:clamp(30px,5vw,46px);color:#4A4036;margin:22px 0 12px;line-height:1.25}
+h1.title .em{color:#C4A77D}
+.hero-sub{font-size:15px;color:#8B8577;max-width:640px;margin:0 auto}
+.hero-meta{margin-top:20px;font-size:13px;color:#A79F8F}
+.hero-meta b{color:#8B7355}
+
+/* thesis */
+.thesis{margin:38px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.t-card{background:#fff;border:1px solid #ECE6DB;border-radius:16px;padding:24px;box-shadow:0 4px 20px rgba(139,115,85,.06)}
+.t-card .n{font-size:12px;font-weight:800;color:#C4A77D;letter-spacing:1px;margin-bottom:8px}
+.t-card p{font-size:14.5px;color:#5A5145;line-height:1.7}
+.t-card.hl{background:linear-gradient(135deg,#C4A77D,#B98A4E);border:none;color:#fff}
+.t-card.hl .n{color:#FFF3E0}
+.t-card.hl p{color:#FFF7EA}
+
+/* sections */
+section{padding:40px 0}
+.sec-head{margin-bottom:26px}
+.sec-idx{font-size:12px;font-family:'Ma Shan Zheng';color:#B98A4E;font-weight:700;letter-spacing:1px}
+h2.sec-title{font-family:'Ma Shan Zheng','Noto Sans SC',serif;font-size:clamp(24px,3.6vw,32px);color:#4A4036;margin-top:4px}
+.sec-lead{font-size:14.5px;color:#8B8577;margin-top:10px;max-width:760px}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:26px 0}
+.kpi{background:#fff;border:1px solid #ECE6DB;border-radius:14px;padding:20px 18px;text-align:center}
+.kpi .big{font-size:34px;font-weight:900;color:#B98A4E;font-family:'Ma Shan Zheng'}
+.kpi .lbl{font-size:12.5px;color:#8B8577;margin-top:4px;letter-spacing:.3px}
+
+/* bars */
+.bar-row{margin:14px 0}
+.bar-top{display:flex;justify-content:space-between;font-size:13.5px;color:#5A5145;margin-bottom:6px;font-weight:600}
+.bar-top span:last-child{color:#B98A4E;font-weight:800}
+.bar{height:12px;background:#EFE9DD;border-radius:8px;overflow:hidden}
+.bar>div{height:100%;border-radius:8px;background:linear-gradient(90deg,#C4A77D,#B98A4E);width:0;transition:width 1.2s cubic-bezier(.25,.46,.45,.94)}
+
+/* feature cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.f-card{background:#fff;border:1px solid #ECE6DB;border-radius:14px;padding:22px;box-shadow:0 3px 14px rgba(139,115,85,.05)}
+.f-card .fc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.f-card .ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;background:rgba(245,158,11,.12);flex-shrink:0}
+.f-card h4{font-size:15.5px;color:#4A4036;font-weight:800}
+.f-card .tag{font-size:11px;color:#B98A4E;font-weight:700;background:rgba(245,158,11,.1);padding:2px 9px;border-radius:10px;margin-left:auto}
+.f-card p{font-size:13.5px;color:#6B6153;line-height:1.65}
+.f-card .how{margin-top:10px;font-size:12.5px;color:#B98A4E;font-weight:600;display:flex;align-items:center;gap:4px}
+.badge-new{background:#7C8B6F;color:#fff!important}
+
+/* comparison */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:18px;overflow:hidden;border:1px solid #ECE6DB;margin-top:20px}
+.compare .col{padding:28px}
+.compare .col.a{background:#fff}
+.compare .col.b{background:#F6F2EA}
+.compare .col h3{font-size:18px;font-family:'Ma Shan Zheng';margin-bottom:4px}
+.compare .col .sub{font-size:12.5px;color:#8B8577;margin-bottom:20px}
+.cmp-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px dashed #E6DFD2;font-size:13.5px}
+.cmp-row:last-child{border:none}
+.cmp-row .k{color:#8B8577}
+.cmp-row .v{font-weight:600;color:#4A4036;text-align:right}
+.compare .col.a .cmp-row .v{color:#B98A4E}
+.compare .col.b .cmp-row .v{color:#7C8B6F}
+
+/* diagram */
+.dg{background:#fff;border:1px solid #ECE6DB;border-radius:18px;padding:30px;margin-top:20px}
+.dg h4{font-size:15px;color:#4A4036;margin-bottom:18px;font-weight:800}
+.dg .layer{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 0}
+.dg .node{background:#F6F2EA;border:1px solid #E6DFD2;border-radius:9px;padding:8px 14px;font-size:13px;color:#5A5145;font-weight:600}
+.dg .node.core{background:linear-gradient(135deg,#C4A77D,#B98A4E);color:#fff;border:none}
+.dg .node.leaf{background:#fff;border-color:#D9CDB8}
+.dg .arrow{color:#C4A77D;font-size:18px}
+
+/* quote */
+.quote{background:linear-gradient(135deg,#8B7355,#6E5B43);border-radius:18px;padding:28px 30px;color:#FFF7EA;margin:26px 0}
+.quote .q{font-size:16.5px;line-height:1.8;font-family:'Noto Sans SC';font-style:normal}
+.quote .a{margin-top:12px;font-size:13px;opacity:.85}
+.quote .a::before{content:'— '}
+
+/* steps */
+.steps{margin:20px 0}
+.step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid #F0E9DD}
+.step:last-child{border:none}
+.step .num{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#C4A77D,#B98A4E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;margin-top:2px}
+.step h5{font-size:15.5px;color:#4A4036;font-weight:800;margin-bottom:5px}
+.step p{font-size:13.5px;color:#6B6153}
+.step .code{font-family:monospace;font-size:12.5px;background:#F6F2EA;padding:3px 10px;border-radius:7px;color:#B98A4E;display:inline-block;margin-top:6px}
+
+/* footer */
+footer{padding:44px 0 60px;text-align:center;border-top:1px solid #ECE6DB;margin-top:40px}
+footer .copy{font-size:12.5px;color:#A79F8F}
+footer .brand2{font-family:'Ma Shan Zheng';color:#8B7355;font-size:18px;margin-bottom:8px}
+footer nav a{color:#8B7355;text-decoration:none;font-size:13px;margin:0 10px}
+
+@media(max-width:720px){
+  .compare{grid-template-columns:1fr}
+  .compare .col.a{border-bottom:1px solid #ECE6DB}
+  header.hero{padding:48px 0 24px}
+  .dg .arrow{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-in">
+  <div class="brand"><span class="dot"></span> AI军团 · 调研</div>
+  <nav class="bn">
+    <a href="https://andy-zokelink.github.io/ai-thinktank.html">🦉 AI军团养成记</a>
+  </nav>
+</div></div>
+
+<div class="wrap">
+
+<header class="hero">
+  <span class="kicker">🔍 能力挖掘调研 · Hermes Studio × Pi Agent</span>
+  <h1 class="title">一个<span class="em">AI中台</span>，一台<span class="em">极简引擎</span></h1>
+  <p class="hero-sub">你已经在用 Hermes Studio 统一管理 Agent、用飞书编程；也用过 Pi 跑项目但觉得"太简单"。这份调研挖出了 <strong style="color:#B98A4E">Studio 里你还不知道的能力</strong>，也看清了 <strong style="color:#7C8B6F">Pi 的"极简"其实是设计而非缺陷</strong>。</p>
+  <div class="hero-meta"><b>数据来源</b>：Hermes Studio 本地 472 REST 端点实测 + 开源社区实践 + 全网案例 · 2026-09</div>
+</header>
+
+<!-- 核心判断 -->
+<div class="thesis">
+  <div class="t-card"><div class="n">THESIS 01 · 定位</div><p>Hermes Studio 是<strong>指挥中枢</strong>（统一管理、调度、看板、跨 Agent 编排），Pi 是<strong>单兵引擎</strong>（极简执行、上下文工程）。两者不是竞品，是<strong>上下两层</strong>。</p></div>
+  <div class="t-card"><div class="n">THESIS 02 · Studio 挖掘</div><p>你现在只用了 Studio 的冰山一角：<strong>472 个 REST 端点、52 个能力模块</strong>。Coding Agents、看板调度、LAN 远程设备、工作流编排——这些才是"AI 中台"的真正富矿。</p></div>
+  <div class="t-card hl"><div class="n">THESIS 03 · Pi 破译</div><p>Pi 的"太简单"不是不够用，而是<strong>刻意少内置、把能力留给你长</strong>。它的核心不是 4 个工具，而是 <strong>Extensions / Skills / AGENTS.md / Dynamic Context</strong> 这套上下文工程。OpenClaw 就长在 Pi 之上。</p></div>
+</div>
+
+<!-- ============ PART 1 : STUDIO ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-idx">PART 01</div>
+    <h2 class="sec-title">Hermes Studio · AI 中台的隐藏富矿</h2>
+    <p class="sec-lead">Studio 是 Hermes Agent 的可视化指挥层（本地 Web UI + 472 个 REST 端点）。下面这张能力全貌，标出你<strong style="color:#B98A4E">可能还没用上</strong>的部分。</p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="big">472</div><div class="lbl">REST 端点</div></div>
+    <div class="kpi"><div class="big">52</div><div class="lbl">能力模块</div></div>
+    <div class="kpi"><div class="big">25+</div><div class="lbl">LAN 设备操作</div></div>
+    <div class="kpi"><div class="big">27</div><div class="lbl">看板调度端点</div></div>
+    <div class="kpi"><div class="big">21</div><div class="lbl">工作流编排端点</div></div>
+  </div>
+
+  <!-- 能力分层图 -->
+  <div class="dg">
+    <h4>Studio 能力分层（你能指挥到什么）</h4>
+    <div class="layer">
+      <span class="node core">Hermes Studio · 指挥中枢</span><span class="arrow">→</span>
+      <span class="node leaf">Coding Agents</span>
+      <span class="node leaf">Profiles</span>
+      <span class="node leaf">Sessions</span>
+      <span class="node leaf">Models/Providers</span>
+    </div>
+    <div class="layer">
+      <span class="node" style="margin-left:8px">调度层</span><span class="arrow">→</span>
+      <span class="node core">Kanban 看板</span>
+      <span class="node core">Workflows 编排</span>
+      <span class="node core">Group Chat</span>
+      <span class="node core">Jobs 定时</span>
+    </div>
+    <div class="layer">
+      <span class="node" style="margin-left:8px">外围层</span><span class="arrow">→</span>
+      <span class="node leaf">Devices/LAN 设备</span>
+      <span class="node leaf">MCP 工具</span>
+      <span class="node leaf">Studio Files</span>
+      <span class="node leaf">Write Gate 审批</span>
+      <span class="node leaf">Social 外发</span>
+      <span class="node leaf">STT/TTS/Media</span>
+    </div>
+  </div>
+
+  <!-- 你还不知道的能力 -->
+  <h3 style="margin:34px 0 16px;font-size:15px;color:#8B8577;font-weight:800;letter-spacing:.5px">「你还不知道」的能力清单</h3>
+  <div class="grid">
+    <div class="f-card"><div class="fc-top"><span class="ico">🤖</span><h4>Coding Agents</h4><span class="tag badge-new">未用</span></div><p>直接在 Studio 里安装、配置、运行 Claude Code / Codex 这些"外部编码 Agent"——把它们当下属挂到中台调度。<div class="how">→ /api/coding-agents/{id}/install</div></p></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">📋</span><h4>Kanban 看板赋能</h4><span class="tag badge-new">未用</span></div><p>把任务建成卡片，指派给不同 Profile 的 Agent 去执行，支持批量派发、链接、统计、诊断——真正的多 Agent 任务生产线。<div class="how">→ /api/hermes/kanban/dispatch</div></p></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">🔀</span><h4>Workflows 编排</h4><span class="tag badge-new">未用</span></div><p>跨 Agent 的图形化工作流，节点级审批、断点重跑、定时调度、一键运行——把重复的多步流程固化成自动化流水线。<div class="how">→ /api/studio/workflows</div></p></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">🖥️</span><h4>Devices / LAN 远程设备</h4><span class="tag badge-new">未用</span></div><p>局域网扫描、配对、远程终端、执行命令、上传下载文件——甚至能管 MCU 微控制器设备和固件分发。一台 Studio 管多台机器。<div class="how">→ /api/devices / {id}/connect</div></p></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">💬</span><h4>Group Chat 多 Agent 群聊</h4><span class="tag badge-new">未用</span></div><p>建一个多智能体群，里面多个 Agent 各自扮演角色、互相协作讨论——让 A、B、C 三个 Agent 共商一个方案，不是你串行调度。<div class="how">→ 61 个群聊端点</div></p></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">🧩</span><h4>MCP 工具注册</h4><span class="tag">已部分用</span></div><p>Studio 里直接管理 MCP server 与工具，把外部系统（你的 Metaso、飞书文档、Sales DB）注册成中台可调用的工具。<div class="how">→ /api/mcp</div></p></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">🛡️</span><h4>Write Gate 写审批</h4><span class="tag badge-new">未用</span></div><p>对 Agent 写操作（改文件/写库）做审批把关，适合"让 Agent 自动跑、但关键写入要人确认"的合规场景。<div class="how">→ /write-gate</div></p></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">📤</span><h4>Social Messages 外发</h4><span class="tag badge-new">未用</span></div><p>统一向外发消息到多处社交平台——自动简报、监控告警集群推送的多渠道分发口。<div class="how">→ /social-messages</div></p></div>
+  </div>
+
+  <div class="quote">
+    <div class="q">判断一个 AI 中台值不值，不看它内置了多少功能，而看它能不能把「多个 Agent」编成一支「有分工的队伍」——有的做规划、有的做研究、有的执行、有的交付。Studio 的看板、工作流、群聊就是干这个的。</div>
+    <div class="a">阿森洞察</div>
+  </div>
+</section>
+
+<!-- ============ PART 2 : PI ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-idx">PART 02</div>
+    <h2 class="sec-title">Pi Agent · 极简不是缺陷，是设计哲学</h2>
+    <p class="sec-lead">Pi 是 Mario Zechner 用 TypeScript 写的极简终端编码 Agent（只有 ~418 行核心、90 词 system prompt、4 个内置工具）。你"跑项目觉得太简单"，恰恰是因为<strong style="color:#7C8B6F">把"极简"当成了"功能少"，但它真正卖的是"可控性"</strong>。</p>
+  </div>
+
+  <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+    <div class="kpi"><div class="big">4</div><div class="lbl">内置工具</div></div>
+    <div class="kpi"><div class="big">~90</div><div class="lbl">词静态提示</div></div>
+    <div class="kpi"><div class="big">3</div><div class="lbl">层扩展机制</div></div>
+    <div class="kpi"><div class="big">50+</div><div class="lbl">官方扩展示例</div></div>
+  </div>
+
+  <!-- 对比 -->
+  <div class="compare">
+    <div class="col a">
+      <h3>🧩 Pi 舍弃了什么（刻意）</h3>
+      <div class="sub">它不做，才把"做"留给你</div>
+      <div class="cmp-row"><span class="k">MCP 内置</span><span class="v">不内置 · 走扩展</span></div>
+      <div class="cmp-row"><span class="k">子 Agent</span><span class="v">不内置 · 走扩展</span></div>
+      <div class="cmp-row"><span class="k">Plan Mode</span><span class="v">不内置 · 走扩展</span></div>
+      <div class="cmp-row"><span class="k">权限弹窗</span><span class="v">不内置 · 走扩展</span></div>
+      <div class="cmp-row"><span class="k">后台 Bash</span><span class="v">不内置 · 前台同步</span></div>
+    </div>
+    <div class="col b">
+      <h3>🧱 Pi 真正在卖什么</h3>
+      <div class="sub">只有 4 工具的"干净闭环"</div>
+      <div class="cmp-row"><span class="k">工具闭环</span><span class="v">读→写→改→跑 → 验证</span></div>
+      <div class="cmp-row"><span class="k">核心哲学</span><span class="v">"这个 harness 是你的"</span></div>
+      <div class="cmp-row"><span class="k">扩展方式</span><span class="v">TypeScript 长出新工具</span></div>
+      <div class="cmp-row"><span class="k">上下文观</span><span class="v">上下文是稀缺资源</span></div>
+      <div class="cmp-row"><span class="k">代表项目</span><span class="v">OpenClaw 基于 Pi 构建</span></div>
+    </div>
+  </div>
+
+  <!-- 扩展机制 -->
+  <h3 style="margin:34px 0 16px;font-size:15px;color:#8B8577;font-weight:800;letter-spacing:.5px">Pi 的 4 层扩展与上下文工程（这就是"把简单搭复杂"的钥匙）</h3>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><h5>AGENTS.md · 项目级上下文</h5><p>把项目怎么装、用什么工具、测试在哪、架构文档在哪——写成 AGENTS.md（兼容 CLAUDE.md），Pi 启动时自动加载，提示词被自动增强。<div class="code">~/.pi/agent/AGENTS.md</div></p></div></div>
+    <div class="step"><div class="num">2</div><div><h5>Skills · 按需加载的能力包</h5><p>实现 Agent Skills 标准，渐进式披露：启动只放名字+描述，任务匹配时才加载全文。可复用 Claude Code / Codex 的技能。<div class="code">~/.pi/agent/skills/my-skill/SKILL.md</div></p></div></div>
+    <div class="step"><div class="num">3</div><div><h5>Extensions · TypeScript 长出能力</h5><p>用代码写扩展，可访问工具/命令/快捷键/事件/整个 TUI。子代理、计划模式、权限门控、SSH 执行、沙箱、MCP 集成全靠它。官方 50+ 示例。<div class="code">自定义 tools / permissions / subagent</div></p></div></div>
+    <div class="step"><div class="num">4</div><div><h5>Dynamic Context · 动态注入上下文</h5><p>扩展注入消息、过滤历史、接 RAG、长期记忆；SYSTEM.md 替换默认提示；接近上限时自动压缩。<div class="code">SYSTEM.md / Compaction / Prompt Templates</div></p></div></div>
+  </div>
+
+  <div class="quote" style="background:linear-gradient(135deg,#7C8B6F,#5E6B52)">
+    <div class="q">为什么 Armin Ronacher（Flask 作者）"上瘾"到几乎只用 Pi？因为当 Agent 的骨架足够干净、足够透明，你才能<strong>精确地控制它的上下文</strong>——而上下文，恰恰是 Agent 时代最稀缺的资源。堆一百个工具不如把上下文喂准。</div>
+    <div class="a">社区共识</div>
+  </div>
+</section>
+
+<!-- ============ PART 3 : 别人都在做什么 ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-idx">PART 03</div>
+    <h2 class="sec-title">别人都在拿它们做什么</h2>
+    <p class="sec-lead">从真实社区实践里提炼的可复用用法——这些是"正在被验证"的模式，不是纸面推测。</p>
+  </div>
+
+  <div class="grid">
+    <div class="f-card"><div class="fc-top"><span class="ico">🧠</span><h4>Hermes · 多 Agent 分工战队</h4></div><p>建一个"总管" Profile 当调度核心，统一协调多个下游 Agent，靠超长上下文跟踪催办。<strong>核心：把单 Agent 升级成有分工的小型数字工作室。</strong></p><div class="how">→ profile 隔离 + 总管调度</div></div></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">💬</span><h4>Hermes · 飞书多 Agent 群协作</h4></div><p>在飞书群 @ 不同的 Agent（后端/前端/总控各一角色），每个 Bot 配不同 Profile + Skills，由总控统一调度。<strong>最贴合你的日常——飞书群就是指挥台。</strong></p><div class="how">→ 群内多 Bot 分工</div></div></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">⏰</span><h4>Hermes · Cron 自动简报</h4></div><p>用自然语言告诉 Agent 想要什么，自动生成 cron 配置：每天定点搜竞品/行业/融资，整理成简报推飞书。<strong>你已经在跑，这是被验证的成熟玩法。</strong></p><div class="how">→ cron 调度 + 推送</div></div></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">📁</span><h4>Hermes · 飞书云文档打通</h4></div><p>Agent 直接读/写飞书云文档与知识库——"把这段总结存到知识库目录"、检索历史方案。你的智库/知识简报都在走这条。<strong>已固化进你的工作流。</strong></p><div class="how">→ 飞书 Doc / Wiki 集成</div></div></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">🔬</span><h4>Pi · 上下文工程重仓</h4></div><p>重度用户用 AGENTS.md + SYSTEM.md + Dynamic Context + RAG 把上下文喂到"精准"，让极简 Agent 在最少的提示下做最对的事。</p><div class="how">→ 上下文工程</div></div></div>
+    <div class="f-card"><div class="fc-top"><span class="ico">🧬</span><h4>Pi · 长出自己想用的 harness</h4></div><p>围绕自己的开发流，用 Extensions + Skills + Prompt Templates 重组 Agent，把"别人内置的功能"变成"你自己造的"。OpenClaw 就是这条路的极致产物。</p><div class="how">→ 自建扩展</div></div></div>
+  </div>
+</section>
+
+<!-- ============ PART 4 : 给你的打法 ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-idx">PART 04</div>
+    <h2 class="sec-title">对你有用的落地建议</h2>
+    <p class="sec-lead">基于你的实际场景（飞书编程 + 多个 Agent + 知识中台），挑三条最值得立刻试的。</p>
+  </div>
+
+  <div class="steps">
+    <div class="step"><div class="num">①</div><div><h5>把 Studio 从"管理"升级到"调度"</h5><p>你已用 Studio 统一管理 + 飞书编程。下一步把它当<strong>指挥台</strong>用：用 Kanban 看板把任务指派给你的多个 Agent（阿森/销售助理/爱马仕），用 Workflows 把重复的"采集→处理→推送"固化成自动流水线，用群聊让多个 Agent 共商一个方案。</p></div></div>
+    <div class="step"><div class="num">②</div><div><h5>别再用 Pi 干它不擅长的事</h5><p>Pi 的极简适合<strong>精准、可控、上下文清晰的编码任务</strong>（单模块、可验证、贴近你 MIT 单专题流水线的思路）。复杂大项目、多 Agent 并行、飞书中台调度——这些交给 Hermes Studio，别硬塞给 Pi。两者配合：Studio 指挥，Pi 执行。</p></div></div>
+    <div class="step"><div class="num">③</div><div><h5>给 Pi 或任何 Agent 建 AGENTS.md</h5><p>把项目上下文（装什么、怎么跑、测试在哪、架构在哪）写进 AGENTS.md——这是社区公认"成本最低、收益最高"的提效动作，对你所有 Agent（含 Hermes）都适用。</p></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand2">AI军团 · 调研</div>
+  <nav>
+    <a href="https://andy-zokelink.github.io/ai-thinktank.html">🦉 AI军团养成记</a>
+    <a href="https://andy-zokelink.github.io/mks-knowledge/">📚 知识库</a>
+  </nav>
+  <div class="copy" style="margin-top:16px">© 2026 · 阿森智库 · 数据来源：Hermes Studio API 实测 + 社区实践</div>
+</footer>
+
+</div>
+
+<script>
+// bar animation on scroll
+const bars=document.querySelectorAll('.bar>div');
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const w=e.target.getAttribute('data-w')||'90%';e.target.style.width=w;}});},{threshold:.4});
+document.querySelectorAll('.bar').forEach(b=>{const d=b.querySelector('div');if(d&&d.dataset.w)d.dataset.w=d.dataset.w;});
+// set widths
+document.querySelectorAll('.bar>div').forEach((d,i)=>{d.style.width=d.dataset.w||'0%';});
+</script>
+</body>
+</html>
